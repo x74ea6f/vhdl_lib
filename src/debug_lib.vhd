@@ -117,7 +117,7 @@ package debug_lib is
     -- ```
     -- clock, reset
     -- ```
-    procedure make_clock(cyc: in time; signal clk: out std_logic);
+    procedure make_clock(signal clk: out std_logic; constant half_period: in time);
     procedure make_reset(signal clk: in std_logic; constant cyc: in natural:=1; signal rstn: out std_logic);
     procedure wait_clock(signal clk: std_logic; constant num: natural:=1);
 
@@ -511,10 +511,9 @@ package body debug_lib is
     -- clock, reset
     -- ```
     -- make clock
-    procedure make_clock(cyc: in time; signal clk: out std_logic) is
+    procedure make_clock(signal clk: out std_logic; constant half_period: in time) is
     begin
-        wait for cyc;
-        -- clk <= not 
+        wait for half_period;
         clk <= '1' when clk='0' else '0';
     end procedure;
 
