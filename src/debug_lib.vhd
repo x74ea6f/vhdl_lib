@@ -28,7 +28,7 @@ package debug_lib is
 
     type print_t is protected
         procedure print_core(str: string; end_line: boolean:=True);
-    end protected print_t;
+    end protected;
 
     shared variable SP: print_t;
 
@@ -107,7 +107,7 @@ package debug_lib is
     -- ```
     type rand_t is protected
         procedure rand(ret: out real);
-    end protected rand_t;
+    end protected;
 
     shared variable SR: rand_t;
 
