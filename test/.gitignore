@@ -1,0 +1,13 @@
+
+## xsim
+.Xil/
+xsim.dir/
+work.*.wdb
+*.pb
+*.jou
+*.log
+*.str
+
+*.swp
+
+sample_out.txt
