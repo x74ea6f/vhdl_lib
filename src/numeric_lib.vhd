@@ -4,6 +4,7 @@
 --
 --
 -- [VHDLでの乗算 - Qiita](https://qiita.com/sarakane/items/62969a54a9ae54759e7c)
+-- [VHDLでの丸め - Qiita](https://qiita.com/ryo_i6/items/e85030be420aa572a5a9)
 --
 
 library ieee;
@@ -15,18 +16,37 @@ package numeric_lib is
     -- max(integer, integer)
     function f_max(a,b: in integer) return integer;
 
-    -- + , uL + uM = uN, N=Max(L,M)+1
+    -- Add , uL + uM = uN, N=Max(L,M)+1
     function f_add(a,b: in unsigned) return unsigned;
     function f_add_u(a,b: in std_logic_vector) return std_logic_vector;
-    -- + , sL + sM = sN, N=Max(L,M)+1
+    -- Add , sL + sM = sN, N=Max(L,M)+1
     function f_add(a,b: in signed) return signed;
     function f_add_s(a,b: in std_logic_vector) return std_logic_vector;
-    -- * , sL * uM = sN, N=L+M
+    --[TODO]
+    -- Add , uL + sM = sN, N=Max(L,M)+1
+    -- Add , sL + uM = sN, N=Max(L,M)+1
+
+    --[TODO]
+    -- Sub , uL + uM = uN, N=Max(L,M)+1
+    -- Sub , sL + sM = sN, N=Max(L,M)+1
+    -- Sub , uL + sM = sN, N=Max(L,M)+1
+    -- Sub , sL + uM = sN, N=Max(L,M)+1
+
+    -- Mul , sL * uM = s(L+M)
     function f_mult(a: in signed; b: in unsigned) return signed;
     function f_mult_s_u(a,b: in std_logic_vector) return std_logic_vector;
-    -- signed / unsinged, sL / uM = sL
+    --[TODO]
+    -- Mul , uL * sM = s(L+M)
+    -- Mul , sL * sM = s(L+M)
+    -- Mul , uL * uM = u(L+M)
+
+    -- Div , sL / uM = sL
     function f_div(a: in signed; b: in unsigned) return signed;
     function f_div_s_u(a,b: in std_logic_vector) return std_logic_vector;
+    --[TODO]
+    -- Div , uL / sM = sL
+    -- Div , sL / sM = sL
+    -- Div , uL / uM = uL
 
     -- or_reduce, unsigned
     function or_reduce(a: in unsigned) return std_logic;
@@ -37,9 +57,9 @@ package numeric_lib is
     -- and_reduce, signed
     function and_reduce(a: in signed) return std_logic;
 
-    -- clip N to M bit, unsigned.
+    -- clip M to N bit, unsigned.
     function f_clip(a: in unsigned; constant n: in natural) return unsigned;
-    -- clip N to M bit, signed.
+    -- clip M to N bit, signed.
     function f_clip(a: in signed; constant n: in natural) return signed;
 
     -- truncate, sM.N to sM
@@ -50,6 +70,10 @@ package numeric_lib is
     function f_round_half_up(a: signed; constant len: natural) return signed;
     -- round to even, sM.N to sM
     function f_round_to_even(a: signed; constant len: natural) return signed;
+    --[TODO]
+    -- truncate, uM.N to uM
+    -- round half up, uM.N to uM
+    -- round to even, uM.N to uM
 end package;
 
 package body numeric_lib is
@@ -173,7 +197,7 @@ package body numeric_lib is
         return and_reduce(unsigned(a));
     end function;
 
-    -- Clip N to M bit, unsigned.
+    -- Clip M to N bit, unsigned.
     function f_clip(a: in unsigned; constant n: in natural) return unsigned is
         alias aa : unsigned(a'length-1 downto 0) is a;
         variable bb: unsigned(n-1 downto 0);
@@ -187,7 +211,7 @@ package body numeric_lib is
         return bb;
     end function;
 
-    -- Clip N to M bit, signed.
+    -- Clip M to N bit, signed.
     function f_clip(a: in signed; constant n: in natural) return signed is
         alias aa : signed(a'length-1 downto 0) is a;
         variable sign: std_logic;
