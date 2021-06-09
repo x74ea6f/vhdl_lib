@@ -13,8 +13,8 @@ use ieee.numeric_std.all;
 -- use ieee.std_logic_misc.all;
 
 package numeric_lib is
-    -- max(integer, integer)
-    function f_max(a,b: in integer) return integer;
+    -- -- max(integer, integer)
+    -- function f_max(a,b: in integer) return integer;
 
     -- Add , uL + uM = uN, N=Max(L,M)+1
     function f_add(a,b: in unsigned) return unsigned;
@@ -24,6 +24,8 @@ package numeric_lib is
     function f_add_s(a,b: in std_logic_vector) return std_logic_vector;
     --[TODO]
     -- Add , uL + sM = sN, N=Max(L,M)+1
+    -- function f_add(a: in unsigned; b: in signed) return signed;
+    -- function f_add_us(a,b: in std_logic_vector) return std_logic_vector;
     -- Add , sL + uM = sN, N=Max(L,M)+1
 
     --[TODO]
@@ -77,11 +79,11 @@ package numeric_lib is
 end package;
 
 package body numeric_lib is
-    -- max(integer, integer)
-    function f_max(a,b: in integer) return integer is
-    begin
-        return maximum(a, b);
-    end function;
+    -- -- max(integer, integer)
+    -- function f_max(a,b: in integer) return integer is
+    -- begin
+    --     return maximum(a, b);
+    -- end function;
     -- function f_max(a,b: in integer) return integer is
     --     variable res: integer;
     -- begin
@@ -92,7 +94,7 @@ package body numeric_lib is
 
     -- unsigned + unsigned, uL + uM = uN, N=Max(L,M)+1
     function f_add(a,b: in unsigned) return unsigned is
-        constant n: integer := f_max(a'length, b'length);
+        constant n: integer := maximum(a'length, b'length);
     begin
         return resize(unsigned(a), n+1) + resize(unsigned(b), n+1);
     end function;
@@ -105,7 +107,7 @@ package body numeric_lib is
 
     -- signed + signed, sL + sM = sN, N=Max(L,M)+1
     function f_add(a,b: in signed) return signed is
-        constant n: integer := f_max(a'length, b'length);
+        constant n: integer := maximum(a'length, b'length);
     begin
         return resize(a, n+1) + resize(b, n+1);
     end function;
