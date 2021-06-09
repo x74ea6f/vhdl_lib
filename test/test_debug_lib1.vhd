@@ -74,7 +74,7 @@ begin
 
 
         -- real
-        v_rl := -1.23;
+        v_rl := -3.14;
         print("-- real=" + v_rl);
         print(v_rl);
         print("to_str(): " & to_str(v_rl));
@@ -152,8 +152,6 @@ begin
         print(", DEC_S=" & to_str(v_u, DEC_S), false);
         print(", HEX=" & to_str(v_u, HEX), false);
         print(", DAFAULT=" & to_str(v_u)); -- default as HEX
-
-
 
         finish(0);
     end process;
