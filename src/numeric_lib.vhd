@@ -22,11 +22,12 @@ package numeric_lib is
     -- Add , sL + sM = sN, N=Max(L,M)+1
     function f_add(a,b: in signed) return signed;
     function f_add_s(a,b: in std_logic_vector) return std_logic_vector;
-    --[TODO]
     -- Add , uL + sM = sN, N=Max(L,M)+1
-    -- function f_add(a: in unsigned; b: in signed) return signed;
-    -- function f_add_us(a,b: in std_logic_vector) return std_logic_vector;
+    function f_add(a: in unsigned; b: in signed) return signed;
+    function f_add_us(a,b: in std_logic_vector) return std_logic_vector;
     -- Add , sL + uM = sN, N=Max(L,M)+1
+    function f_add(a: in signed; b: in unsigned) return signed;
+    function f_add_su(a,b: in std_logic_vector) return std_logic_vector;
 
     --[TODO]
     -- Sub , uL + uM = uN, N=Max(L,M)+1
@@ -99,7 +100,6 @@ package body numeric_lib is
         return resize(unsigned(a), n+1) + resize(unsigned(b), n+1);
     end function;
 
-    -- unsigned + unsigned, uL + uM = uN, N=Max(L,M)+1
     function f_add_u(a,b: in std_logic_vector) return std_logic_vector is
     begin
         return std_logic_vector(f_add(unsigned(a), unsigned(b)));
@@ -112,11 +112,47 @@ package body numeric_lib is
         return resize(a, n+1) + resize(b, n+1);
     end function;
 
-    -- signed + signed, sL + sM = sN, N=Max(L,M)+1
     function f_add_s(a,b: in std_logic_vector) return std_logic_vector is
     begin
         return std_logic_vector(f_add(signed(a), signed(b)));
     end function;
+
+    -- Add , uL + sM = sN, N=Max(L,M)+1
+    function f_add(a: in unsigned; b: in signed) return signed is
+        constant n: integer := maximum(a'length, b'length);
+    begin
+        return signed(resize(a, n+1)) + resize(b, n+1);
+    end function;
+
+    function f_add_us(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_add(unsigned(a), signed(b)));
+    end function;
+
+    -- -- Add , uL + sM = sN, N=Max(L,M)+1
+    -- function f_add(a: in unsigned; b: in signed) return signed is
+    --     constant n: integer := maximum(a'length, b'length);
+    -- begin
+    --     return signed(resize(a, n+1)) + resize(b, n+1);
+    -- end function;
+
+    -- function f_add_us(a,b: in std_logic_vector) return std_logic_vector is
+    -- begin
+    --     return std_logic_vector(f_add(unsigned(a), signed(b)));
+    -- end function;
+
+    -- Add , sL + uM = sN, N=Max(L,M)+1
+    function f_add(a: in signed; b: in unsigned) return signed is
+        constant n: integer := maximum(a'length, b'length);
+    begin
+        return resize(a, n+1) + signed(resize(b, n+1));
+    end function;
+
+    function f_add_su(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_add(signed(a), unsigned(b)));
+    end function;
+
 
     -- signed * unsigned, sL * uM = sN, N=L+M
     function f_mult(a: in signed; b: in unsigned) return signed is
