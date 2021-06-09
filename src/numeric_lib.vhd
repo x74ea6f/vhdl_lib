@@ -13,37 +13,54 @@ use ieee.numeric_std.all;
 -- use ieee.std_logic_misc.all;
 
 package numeric_lib is
-    -- -- max(integer, integer)
-    -- function f_max(a,b: in integer) return integer;
 
-    -- Add , uL + uM = uN, N=Max(L,M)+1
+    --```
+    -- Add
+    --```
+    -- uL + uM = uN, N=Max(L,M)+1
     function f_add(a,b: in unsigned) return unsigned;
     function f_add_u(a,b: in std_logic_vector) return std_logic_vector;
-    -- Add , sL + sM = sN, N=Max(L,M)+1
+    -- sL + sM = sN, N=Max(L,M)+1
     function f_add(a,b: in signed) return signed;
     function f_add_s(a,b: in std_logic_vector) return std_logic_vector;
-    -- Add , uL + sM = sN, N=Max(L,M)+1
+    -- uL + sM = sN, N=Max(L,M)+1
     function f_add(a: in unsigned; b: in signed) return signed;
     function f_add_us(a,b: in std_logic_vector) return std_logic_vector;
-    -- Add , sL + uM = sN, N=Max(L,M)+1
+    -- sL + uM = sN, N=Max(L,M)+1
     function f_add(a: in signed; b: in unsigned) return signed;
     function f_add_su(a,b: in std_logic_vector) return std_logic_vector;
 
-    --[TODO]
-    -- Sub , uL + uM = uN, N=Max(L,M)+1
-    -- Sub , sL + sM = sN, N=Max(L,M)+1
-    -- Sub , uL + sM = sN, N=Max(L,M)+1
-    -- Sub , sL + uM = sN, N=Max(L,M)+1
+    --```
+    -- Sub
+    --```
+    -- uL + uM = uN, N=Max(L,M)+1
+    function f_sub(a,b: in unsigned) return signed;
+    function f_sub_u(a,b: in std_logic_vector) return std_logic_vector;
+    -- sL + sM = sN, N=Max(L,M)+1
+    function f_sub(a,b: in signed) return signed;
+    function f_sub_s(a,b: in std_logic_vector) return std_logic_vector;
+    -- uL + sM = sN, N=Max(L,M)+1
+    function f_sub(a: in unsigned; b: in signed) return signed;
+    function f_sub_us(a,b: in std_logic_vector) return std_logic_vector;
+    -- sL + uM = sN, N=Max(L,M)+1
+    function f_sub(a: in signed; b: in unsigned) return signed;
+    function f_sub_su(a,b: in std_logic_vector) return std_logic_vector;
 
-    -- Mul , sL * uM = s(L+M)
+    --```
+    -- Mul
+    --```
+    -- sL * uM = s(L+M)
     function f_mult(a: in signed; b: in unsigned) return signed;
     function f_mult_s_u(a,b: in std_logic_vector) return std_logic_vector;
     --[TODO]
-    -- Mul , uL * sM = s(L+M)
-    -- Mul , sL * sM = s(L+M)
-    -- Mul , uL * uM = u(L+M)
+    -- uL * sM = s(L+M)
+    -- sL * sM = s(L+M)
+    -- uL * uM = u(L+M)
 
-    -- Div , sL / uM = sL
+    --```
+    -- Div
+    --```
+    -- sL / uM = sL
     function f_div(a: in signed; b: in unsigned) return signed;
     function f_div_s_u(a,b: in std_logic_vector) return std_logic_vector;
     --[TODO]
@@ -51,6 +68,9 @@ package numeric_lib is
     -- Div , sL / sM = sL
     -- Div , uL / uM = uL
 
+    --```
+    -- Reduce
+    --```
     -- or_reduce, unsigned
     function or_reduce(a: in unsigned) return std_logic;
     -- or_reduce, signed
@@ -60,11 +80,17 @@ package numeric_lib is
     -- and_reduce, signed
     function and_reduce(a: in signed) return std_logic;
 
+    --```
+    -- Clip
+    --```
     -- clip M to N bit, unsigned.
     function f_clip(a: in unsigned; constant n: in natural) return unsigned;
     -- clip M to N bit, signed.
     function f_clip(a: in signed; constant n: in natural) return signed;
 
+    --```
+    -- Round
+    --```
     -- truncate, sM.N to sM
     function f_truncate(a: signed; constant len: natural) return signed;
     -- round toward zero(RZ), sM.N to sM
@@ -80,18 +106,10 @@ package numeric_lib is
 end package;
 
 package body numeric_lib is
-    -- -- max(integer, integer)
-    -- function f_max(a,b: in integer) return integer is
-    -- begin
-    --     return maximum(a, b);
-    -- end function;
-    -- function f_max(a,b: in integer) return integer is
-    --     variable res: integer;
-    -- begin
-    --     res := a when (a>b) else b;
-    --     return res;
-    --     -- return (a when (a>b) else b); -- 何故かエラー。
-    -- end function;
+
+    --```
+    -- Add
+    --```
 
     -- unsigned + unsigned, uL + uM = uN, N=Max(L,M)+1
     function f_add(a,b: in unsigned) return unsigned is
@@ -117,7 +135,7 @@ package body numeric_lib is
         return std_logic_vector(f_add(signed(a), signed(b)));
     end function;
 
-    -- Add , uL + sM = sN, N=Max(L,M)+1
+    -- uL + sM = sN, N=Max(L,M)+1
     function f_add(a: in unsigned; b: in signed) return signed is
         constant n: integer := maximum(a'length, b'length);
     begin
@@ -129,19 +147,7 @@ package body numeric_lib is
         return std_logic_vector(f_add(unsigned(a), signed(b)));
     end function;
 
-    -- -- Add , uL + sM = sN, N=Max(L,M)+1
-    -- function f_add(a: in unsigned; b: in signed) return signed is
-    --     constant n: integer := maximum(a'length, b'length);
-    -- begin
-    --     return signed(resize(a, n+1)) + resize(b, n+1);
-    -- end function;
-
-    -- function f_add_us(a,b: in std_logic_vector) return std_logic_vector is
-    -- begin
-    --     return std_logic_vector(f_add(unsigned(a), signed(b)));
-    -- end function;
-
-    -- Add , sL + uM = sN, N=Max(L,M)+1
+    -- sL + uM = sN, N=Max(L,M)+1
     function f_add(a: in signed; b: in unsigned) return signed is
         constant n: integer := maximum(a'length, b'length);
     begin
@@ -153,6 +159,61 @@ package body numeric_lib is
         return std_logic_vector(f_add(signed(a), unsigned(b)));
     end function;
 
+    --```
+    -- Sub
+    --```
+
+    -- uL - uM = sN, N=Max(L,M)+1
+    function f_sub(a,b: in unsigned) return signed is
+        constant n: integer := maximum(a'length, b'length);
+    begin
+        return resize(signed('0' & a), n+1) - resize(signed('0' & b), n+1);
+    end function;
+
+    function f_sub_u(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_sub(unsigned(a), unsigned(b)));
+    end function;
+
+    -- sL - sM = sN, N=Max(L,M)+1
+    function f_sub(a,b: in signed) return signed is
+        constant n: integer := maximum(a'length, b'length);
+    begin
+        return resize(a, n+1) - resize(b, n+1);
+    end function;
+
+    function f_sub_s(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_sub(signed(a), signed(b)));
+    end function;
+
+    -- uL - sM = sN, N=Max(L,M)+1
+    function f_sub(a: in unsigned; b: in signed) return signed is
+        constant n: integer := maximum(a'length, b'length);
+    begin
+        return resize(signed('0' & a), n+1) - resize(b, n+1);
+    end function;
+
+    function f_sub_us(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_sub(unsigned(a), signed(b)));
+    end function;
+
+    -- sL - uM = sN, N=Max(L,M)+1
+    function f_sub(a: in signed; b: in unsigned) return signed is
+        constant n: integer := maximum(a'length, b'length);
+    begin
+        return resize(a, n+1) - resize(signed('0' & b), n+1);
+    end function;
+
+    function f_sub_su(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_sub(signed(a), unsigned(b)));
+    end function;
+
+    --```
+    -- Mul
+    --```
 
     -- signed * unsigned, sL * uM = sN, N=L+M
     function f_mult(a: in signed; b: in unsigned) return signed is
