@@ -69,13 +69,13 @@ package numeric_lib is
     -- uL / uM = uL
     function f_div(a: in unsigned; b: in unsigned) return unsigned;
     function f_div_u(a,b: in std_logic_vector) return std_logic_vector;
-    -- uL / sM = sL
+    -- uL / sM = s(L+1)
     function f_div(a: in unsigned; b: in signed) return signed;
     function f_div_us(a,b: in std_logic_vector) return std_logic_vector;
     -- sL / uM = sL
     function f_div(a: in signed; b: in unsigned) return signed;
     function f_div_su(a,b: in std_logic_vector) return std_logic_vector;
-    -- sL / sM = sL
+    -- sL / sM = s(L+1)
     function f_div(a: in signed; b: in signed) return signed;
     function f_div_s(a,b: in std_logic_vector) return std_logic_vector;
 
@@ -284,6 +284,14 @@ package body numeric_lib is
     function f_div(a: in unsigned; b: in unsigned) return unsigned is
         variable res: unsigned(a'length-1 downto 0);
     begin
+        if b = 0 then
+            if a > 0 then res := (others=>'1'); -- Max
+            else res := (others=>'0'); -- a=0, 0
+            end if;
+        else 
+            res := a / b;
+        end if;
+        return res;
         return res;
     end function;
 
@@ -292,10 +300,17 @@ package body numeric_lib is
         return std_logic_vector(f_div(unsigned(a), unsigned(b)));
     end function;
 
-    -- uL / sM = sL
+    -- uL / sM = s(L+1)
     function f_div(a: in unsigned; b: in signed) return signed is
-        variable res: signed(a'length-1 downto 0);
+        variable res: signed(a'length downto 0);
     begin
+        if b = 0 then
+            if a > 0 then res := (res'left=>'0', others=>'1'); -- Max
+            else res := (others=>'0'); -- a=0, 0
+            end if;
+        else 
+            res := signed('0' & a) / signed(b);
+        end if;
         return res;
     end function;
 
@@ -311,7 +326,7 @@ package body numeric_lib is
         if b = 0 then
             if a > 0 then res := (res'left=>'0', others=>'1'); -- Max
             elsif a < 0 then res := (res'left=>'1', others=>'0'); -- Min
-            else then res := (others=>'0'); -- a=0, 0
+            else res := (others=>'0'); -- a=0, 0
             end if;
         else 
             res := signed(a) / signed('0' & b);
@@ -325,10 +340,18 @@ package body numeric_lib is
     end function;
 
 --TODO
-    -- sL / sM = sL
+    -- sL / sM = s(L+1)
     function f_div(a: in signed; b: in signed) return signed is
-        variable res: signed(a'length-1 downto 0);
+        variable res: signed(a'length downto 0);
     begin
+        if b = 0 then
+            if a > 0 then res := (res'left=>'0', others=>'1'); -- Max
+            elsif a < 0 then res := (res'left=>'1', others=>'0'); -- Min
+            else res := (others=>'0'); -- a=0, 0
+            end if;
+        else 
+            res := resize(a, a'length+1) / resize(b, b'length+1);
+        end if;
         return res;
     end function;
 

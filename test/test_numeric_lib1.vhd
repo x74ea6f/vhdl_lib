@@ -47,6 +47,13 @@ architecture SIM of test_numeric_lib1 is
         end if;
     end function;
 
+    function clip_int(a: integer; constant n: positive) return integer is
+        variable m: natural;
+    begin
+        m := n -1;
+        return maximum(minimum(a, (2**m)-1), -(2**m));
+    end function;
+
 begin
     process is
         variable show_result: boolean := False;
@@ -63,7 +70,7 @@ begin
             check(f_add(u_a, u_b), to_unsigned(i+k, DTW+1), "f_add_u", show_result);
             check(f_sub(u_a, u_b), to_signed(i-k, DTW+1), "f_sub_u", show_result);
             check(f_mul(u_a, u_b), to_unsigned(i*k, DTW*2), "f_mul_u", show_result);
-            check(f_div(u_a, u_b), to_unsigned(div_int(i,k), DTW), "f_mul_u", show_result);
+            check(f_div(u_a, u_b), to_unsigned(clip_int(div_int(i,k), DTW+1), DTW), "f_mul_u", show_result);
         end loop;
         end loop;
 
@@ -71,10 +78,11 @@ begin
         for k in S_MIN to S_MAX loop
             u_a:= to_unsigned(i, DTW);
             s_b:= to_signed(k, DTW);
+            -- print("A=" + u_a & ", B=" + s_b);
             check(f_add(u_a, s_b), to_signed(i+k, DTW+1), "f_add_us", show_result);
             check(f_sub(u_a, s_b), to_signed(i-k, DTW+1), "f_sub_us", show_result);
             check(f_mul(u_a, s_b), to_signed(i*k, DTW*2), "f_mul_us", show_result);
-            check(f_div(u_a, s_b), to_signed(div_int(i,k), DTW), "f_mul_us", show_result);
+            check(f_div(u_a, s_b), to_signed(clip_int(div_int(i,k), DTW+1), DTW+1), "f_mul_us", show_result);
         end loop;
         end loop;
 
@@ -86,7 +94,7 @@ begin
             check(f_add(s_a, u_b), to_signed(i+k, DTW+1), "f_add_su", show_result);
             check(f_sub(s_a, u_b), to_signed(i-k, DTW+1), "f_sub_su", show_result);
             check(f_mul(s_a, u_b), to_signed(i*k, DTW*2), "f_mul_su", show_result);
-            check(f_div(s_a, u_b), to_signed(div_int(i,k), DTW), "f_mul_su", show_result);
+            check(f_div(s_a, u_b), to_signed(clip_int(div_int(i,k), DTW), DTW), "f_mul_su", show_result);
         end loop;
         end loop;
 
@@ -94,10 +102,11 @@ begin
         for k in S_MIN to S_MAX loop
             s_a:= to_signed(i, DTW);
             s_b:= to_signed(k, DTW);
+            -- print("A=" + s_a & ", B=" + s_b);
             check(f_add(s_a, s_b), to_signed(i+k, DTW+1), "f_add_s", show_result);
             check(f_sub(s_a, s_b), to_signed(i-k, DTW+1), "f_sub_s", show_result);
             check(f_mul(s_a, s_b), to_signed(i*k, DTW*2), "f_mul_s", show_result);
-            check(f_div(s_a, s_b), to_signed(div_int(i,k), DTW), "f_mul_s", show_result);
+            check(f_div(s_a, s_b), to_signed(clip_int(div_int(i,k), DTW+1), DTW+1), "f_mul_s", show_result);
         end loop;
         end loop;
 
