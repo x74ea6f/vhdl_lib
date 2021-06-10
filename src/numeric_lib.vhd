@@ -306,23 +306,16 @@ package body numeric_lib is
 
     -- sL / uM = sL
     function f_div(a: in signed; b: in unsigned) return signed is
-        variable aa: signed(a'length-1 downto 0);
-        variable bb: signed(b'length downto 0);
         variable res: signed(a'length-1 downto 0);
     begin
-        aa := signed(a);
-        bb := signed('0' & b);
-        if bb = 0 then
-            if aa = 0 then
-                res := (res'left=>'0', others=>'0');
-            elsif aa > 0 then
-                res := (res'left=>'0', others=>'1');
-            else
-                res := (res'left=>'1', others=>'0');
+        if b = 0 then
+            if a > 0 then res := (res'left=>'0', others=>'1'); -- Max
+            elsif a < 0 then res := (res'left=>'1', others=>'0'); -- Min
+            else then res := (others=>'0'); -- a=0, 0
             end if;
-            return res;
+        else 
+            res := signed(a) / signed('0' & b);
         end if;
-        res := aa / bb;
         return res;
     end function;
 
