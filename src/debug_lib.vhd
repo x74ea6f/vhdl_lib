@@ -152,8 +152,10 @@ package body debug_lib is
         -- for library debug only
         procedure check_line(l_str: in string)is
         begin
-            -- report "Data=" & l_pre.all & ", Exp=" & l_str;
-            assert l_pre.all = l_str report "Compare NG, Data=" & l_pre.all & ", Exp=" & l_str;
+            report "Data=" & l_pre.all & ", Exp=" & l_str;
+            assert l_pre.all = l_str
+            report "Compare NG, Data=" & l_pre.all & ", Exp=" & l_str
+            severity ERROR;
         end procedure;
 
     end protected body print_t;
