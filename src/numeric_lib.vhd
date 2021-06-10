@@ -49,7 +49,6 @@ package numeric_lib is
     --```
     -- Mul
     --```
-    --[TODO]
     -- uL * uM = u(L+M)
     function f_mul(a, b: in unsigned) return unsigned;
     function f_mul_u(a,b: in std_logic_vector) return std_logic_vector;
@@ -66,13 +65,19 @@ package numeric_lib is
     --```
     -- Div
     --```
+    --[TODO]
+    -- uL / uM = uL
+    function f_div(a: in unsigned; b: in unsigned) return unsigned;
+    function f_div_u(a,b: in std_logic_vector) return std_logic_vector;
+    -- uL / sM = sL
+    function f_div(a: in unsigned; b: in signed) return signed;
+    function f_div_us(a,b: in std_logic_vector) return std_logic_vector;
     -- sL / uM = sL
     function f_div(a: in signed; b: in unsigned) return signed;
-    function f_div_s_u(a,b: in std_logic_vector) return std_logic_vector;
-    --[TODO]
-    -- Div , uL / sM = sL
-    -- Div , sL / sM = sL
-    -- Div , uL / uM = uL
+    function f_div_su(a,b: in std_logic_vector) return std_logic_vector;
+    -- sL / sM = sL
+    function f_div(a: in signed; b: in signed) return signed;
+    function f_div_s(a,b: in std_logic_vector) return std_logic_vector;
 
     --```
     -- Reduce
@@ -221,7 +226,6 @@ package body numeric_lib is
     -- Mul
     --```
 
-    --TODO
     -- uL * uM = u(L+M)
     function f_mul(a, b: in unsigned) return unsigned is
     begin
@@ -260,7 +264,6 @@ package body numeric_lib is
         return std_logic_vector(f_mul(signed(a), unsigned(b)));
     end function;
 
-    --TODO
     -- sL * sM = s(L+M)
     function f_mul(a,b: in signed) return signed is
     begin
@@ -273,9 +276,35 @@ package body numeric_lib is
 
     --```
     -- Div
+    -- 0/0=0, +n/0=+Max, -n/0=-Max
     --```
 
-    -- signed / unsinged, sL / uM = sL
+--TODO
+    -- uL / uM = uL
+    function f_div(a: in unsigned; b: in unsigned) return unsigned is
+        variable res: unsigned(a'length-1 downto 0);
+    begin
+        return res;
+    end function;
+
+    function f_div_u(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_div(unsigned(a), unsigned(b)));
+    end function;
+
+    -- uL / sM = sL
+    function f_div(a: in unsigned; b: in signed) return signed is
+        variable res: signed(a'length-1 downto 0);
+    begin
+        return res;
+    end function;
+
+    function f_div_us(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_div(unsigned(a), signed(b)));
+    end function;
+
+    -- sL / uM = sL
     function f_div(a: in signed; b: in unsigned) return signed is
         variable aa: signed(a'length-1 downto 0);
         variable bb: signed(b'length downto 0);
@@ -283,9 +312,7 @@ package body numeric_lib is
     begin
         aa := signed(a);
         bb := signed('0' & b);
-        -- bb := signed(resize(unsigned(b), b'length + 1));
         if bb = 0 then
-            -- 0/0=0, +n/0=+Max, -n/2=-Max
             if aa = 0 then
                 res := (res'left=>'0', others=>'0');
             elsif aa > 0 then
@@ -299,11 +326,29 @@ package body numeric_lib is
         return res;
     end function;
 
-    -- signed / unsinged, sL / uM = sL
-    function f_div_s_u(a,b: in std_logic_vector) return std_logic_vector is
+    function f_div_su(a,b: in std_logic_vector) return std_logic_vector is
     begin
         return std_logic_vector(f_div(signed(a), unsigned(b)));
     end function;
+
+--TODO
+    -- sL / sM = sL
+    function f_div(a: in signed; b: in signed) return signed is
+        variable res: signed(a'length-1 downto 0);
+    begin
+        return res;
+    end function;
+
+    function f_div_s(a,b: in std_logic_vector) return std_logic_vector is
+    begin
+        return std_logic_vector(f_div(signed(a), signed(b)));
+    end function;
+
+
+
+    --```
+    -- Reduce
+    --```
 
     -- or_reduce
     function or_reduce(a: in unsigned) return std_logic is

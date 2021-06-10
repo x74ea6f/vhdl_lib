@@ -34,6 +34,19 @@ architecture SIM of test_numeric_lib1 is
         check(std_logic_vector(data), std_logic_vector(exp), msg, show_result);
     end procedure;
 
+    -- 0/0=0, +n/0=+Max, -n/0=-Max
+    function div_int(a: integer; b: integer) return integer is
+    begin
+        if b=0 then
+            if a=0 then return 0;
+            elsif a>0 then return integer'high;
+            else return integer'low;
+            end if;
+        else
+            return a/b;
+        end if;
+    end function;
+
 begin
     process is
         variable show_result: boolean := False;
@@ -50,6 +63,7 @@ begin
             check(f_add(u_a, u_b), to_unsigned(i+k, DTW+1), "f_add_u", show_result);
             check(f_sub(u_a, u_b), to_signed(i-k, DTW+1), "f_sub_u", show_result);
             check(f_mul(u_a, u_b), to_unsigned(i*k, DTW*2), "f_mul_u", show_result);
+            check(f_div(u_a, u_b), to_unsigned(div_int(i,k), DTW), "f_mul_u", show_result);
         end loop;
         end loop;
 
@@ -60,6 +74,7 @@ begin
             check(f_add(u_a, s_b), to_signed(i+k, DTW+1), "f_add_us", show_result);
             check(f_sub(u_a, s_b), to_signed(i-k, DTW+1), "f_sub_us", show_result);
             check(f_mul(u_a, s_b), to_signed(i*k, DTW*2), "f_mul_us", show_result);
+            check(f_div(u_a, s_b), to_signed(div_int(i,k), DTW), "f_mul_us", show_result);
         end loop;
         end loop;
 
@@ -71,6 +86,7 @@ begin
             check(f_add(s_a, u_b), to_signed(i+k, DTW+1), "f_add_su", show_result);
             check(f_sub(s_a, u_b), to_signed(i-k, DTW+1), "f_sub_su", show_result);
             check(f_mul(s_a, u_b), to_signed(i*k, DTW*2), "f_mul_su", show_result);
+            check(f_div(s_a, u_b), to_signed(div_int(i,k), DTW), "f_mul_su", show_result);
         end loop;
         end loop;
 
@@ -79,8 +95,9 @@ begin
             s_a:= to_signed(i, DTW);
             s_b:= to_signed(k, DTW);
             check(f_add(s_a, s_b), to_signed(i+k, DTW+1), "f_add_s", show_result);
-            check(f_sub(s_a, s_b), to_signed(i-k, DTW+1), "f_sub_ss", show_result);
-            check(f_mul(s_a, s_b), to_signed(i*k, DTW*2), "f_mul_ss", show_result);
+            check(f_sub(s_a, s_b), to_signed(i-k, DTW+1), "f_sub_s", show_result);
+            check(f_mul(s_a, s_b), to_signed(i*k, DTW*2), "f_mul_s", show_result);
+            check(f_div(s_a, s_b), to_signed(div_int(i,k), DTW), "f_mul_s", show_result);
         end loop;
         end loop;
 
