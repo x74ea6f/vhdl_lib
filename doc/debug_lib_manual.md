@@ -6,19 +6,31 @@ author:
 ---
 
 # debug_lib
-## about
+## About
 VHDL simulation debug library(package).  
 Simple and General useful.  
 
 ## Functions
 - print() : for Terminal log, Simple textio Wrapper.
-- to_str() : standard types to string.
-- "+" : String + StandardTypes = String
+- to_str() : SomeType to string.
+- "+" : String + SomeType = String
 - rand_slv(): return random std_logic_vector
 - make_clock(): make clock
 - make_reset(): make reset
 - wait_clock(): wait clock
 - check(): check compare
+
+### SomeType
+Support type for function of to_str(), "+".
+
+| SomeType | | 
+| - | - |
+| bit | bit_vector |
+| boolean | boolean_vector |
+| integer | integer_vector |
+| real | real_vector |
+| std_logic | std_logic_vector |
+| signed | unsigned |
 
 ## Usage
 1. Add "src/debug_lib.vhd" to compile files.
@@ -32,17 +44,24 @@ Simple and General useful.
         print("Integer=" & to_str(v_int, HEX)); -- flush
     ```
 
+## Testbench exmaple
+Code:  
+```VHDL
+print("Hello world! " + v_int); -- String + Integer
+print("StdLogiVector=" + v_slv & ", ", false); -- false: not flush
+print("Integer=" & to_str(v_int, HEX)); -- flush
+```
+see all. [../example/debug_lib_example.vhd](../example/debug_lib_example.vhd)
+
+Result:  
+```bash
+Hello world! 123
+StdLogiVector=0x1AB, Integer=0x0000007B
+Finish @100ns
+```
 ## Tips
 ### + Operator
-"+" is Operator function of "string + SomeType".
-| SomeType | | 
-| - | - |
-| bit | bit_vector |
-| boolean | boolean_vector |
-| integer | integer_vector |
-| real | real_vector |
-| std_logic | std_logic_vector |
-| signed | unsigned |
+"+" is Operator function of "string + [SomeType](#sometype)".
 
 #### Example:
 | Code | Return String | Description | 
@@ -57,13 +76,4 @@ Simple and General useful.
 ```VHDL
 variable v_bl: boolean:= True; 
 variable v_slv: std_logic_vector(7 down to 0):= X"12";
-```
-
-## Testbench exmaple
-run [../example/debug_lib_example.vhd](../example/debug_lib_example.vhd)
-
-```
-Hello world! 123
-StdLogiVector=0x1AB, Integer=0x0000007B
-Finish @100ns
 ```
