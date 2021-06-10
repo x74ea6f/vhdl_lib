@@ -82,13 +82,13 @@ package numeric_lib is
     -- Reduce
     --```
     -- or_reduce, unsigned
-    function or_reduce(a: in unsigned) return std_logic;
+    function f_or_reduce(a: in unsigned) return std_logic;
     -- or_reduce, signed
-    function or_reduce(a: in signed) return std_logic;
+    function f_or_reduce(a: in signed) return std_logic;
     -- and_reduce, unsigned
-    function and_reduce(a: in unsigned) return std_logic;
+    function f_and_reduce(a: in unsigned) return std_logic;
     -- and_reduce, signed
-    function and_reduce(a: in signed) return std_logic;
+    function f_and_reduce(a: in signed) return std_logic;
 
     --```
     -- Clip
@@ -415,7 +415,7 @@ package body numeric_lib is
     --```
 
     -- or_reduce
-    function or_reduce(a: in unsigned) return std_logic is
+    function f_or_reduce(a: in unsigned) return std_logic is
         variable ret : std_logic := '0';
     begin
         for i in a'range loop
@@ -425,13 +425,13 @@ package body numeric_lib is
     end function;
 
     -- or_reduce
-    function or_reduce(a: in signed) return std_logic is
+    function f_or_reduce(a: in signed) return std_logic is
     begin
-        return or_reduce(unsigned(a));
+        return f_or_reduce(unsigned(a));
     end function;
 
     -- and_reduce
-    function and_reduce(a: in unsigned) return std_logic is
+    function f_and_reduce(a: in unsigned) return std_logic is
         variable ret : std_logic := '1';
     begin
         for i in a'range loop
@@ -441,9 +441,9 @@ package body numeric_lib is
     end function;
 
     -- and_reduce
-    function and_reduce(a: in signed) return std_logic is
+    function f_and_reduce(a: in signed) return std_logic is
     begin
-        return and_reduce(unsigned(a));
+        return f_and_reduce(unsigned(a));
     end function;
 
     -- Clip M to N bit, unsigned.
@@ -453,7 +453,7 @@ package body numeric_lib is
     begin
         -- reduction OR
         if aa >= (2**n) then
-            bb := (others=>'1');
+            bb := f_high_u(n);
         else
             bb := aa(n-1 downto 0);
         end if;
@@ -480,7 +480,7 @@ package body numeric_lib is
     --     variable bb: unsigned(n-1 downto 0);
     -- begin
     --     -- reduction OR
-    --     if or_reduce(aa(aa'length-1 downto n))='1' then
+    --     if f_or_reduce(aa(aa'length-1 downto n))='1' then
     --         bb := (others=>'1');
     --     else
     --         bb := aa(n-1 downto 0);
@@ -494,13 +494,13 @@ package body numeric_lib is
     -- begin
     --     sign := aa(aa'length-1); -- sign
     --     if sign='0' then -- >0
-    --         if or_reduce(aa(aa'length-2 downto n-1))='1' then
+    --         if f_or_reduce(aa(aa'length-2 downto n-1))='1' then
     --             bb := (others=>'1');
     --         else
     --             bb := aa(n-2 downto 0);
     --         end if;
     --     else
-    --         if and_reduce(aa(aa'length-2 downto n-1))='0' then
+    --         if f_and_reduce(aa(aa'length-2 downto n-1))='0' then
     --             bb := (others=>'0');
     --         else
     --             bb := aa(n-2 downto 0);

@@ -63,9 +63,9 @@ begin
             -- print("A=" + u_a);
 
             exp_sl := '0' when (i=0) else '1';
-            check(or_reduce(u_a), exp_sl , "or_reduce_u", show_result);
+            check(f_or_reduce(u_a), exp_sl , "or_reduce_u", show_result);
             exp_sl := '1' when (i=U_MAX_A) else '0';
-            check(and_reduce(u_a), exp_sl , "and_reduce_u", show_result);
+            check(f_and_reduce(u_a), exp_sl , "and_reduce_u", show_result);
 
             check(f_clip(u_a, LEN_B), to_unsigned(clip_int(i, LEN_B+1), LEN_B) , "clip_u", show_result);
 
@@ -76,9 +76,9 @@ begin
             -- print("A=" + s_a);
 
             exp_sl := '0' when (i=0) else '1';
-            check(or_reduce(s_a), exp_sl , "or_reduce_s", show_result);
+            check(f_or_reduce(s_a), exp_sl , "or_reduce_s", show_result);
             exp_sl := '1' when (i=-1) else '0';
-            check(and_reduce(s_a), exp_sl , "and_reduce_s", show_result);
+            check(f_and_reduce(s_a), exp_sl , "and_reduce_s", show_result);
 
             check(f_clip(s_a, LEN_B), to_signed(clip_int(i, LEN_B), LEN_B) , "clip_s", show_result);
         end loop;
