@@ -452,7 +452,7 @@ package body numeric_lib is
         variable bb: unsigned(n-1 downto 0);
     begin
         -- reduction OR
-        if or_reduce(aa(aa'length-1 downto n))='1' then
+        if aa >= (2**n) then
             bb := (others=>'1');
         else
             bb := aa(n-1 downto 0);
@@ -463,25 +463,51 @@ package body numeric_lib is
     -- Clip M to N bit, signed.
     function f_clip(a: in signed; constant n: in natural) return signed is
         alias aa : signed(a'length-1 downto 0) is a;
-        variable sign: std_logic;
-        variable bb: signed(n-2 downto 0);
+        variable ret: signed(n-1 downto 0);
     begin
-        sign := aa(aa'length-1); -- sign
-        if sign='0' then -- >0
-            if or_reduce(aa(aa'length-2 downto n-1))='1' then
-                bb := (others=>'1');
-            else
-                bb := aa(n-2 downto 0);
-            end if;
+        if aa >= 2**(n-1) then
+            ret := f_high_s(n);
+        elsif aa< -(2**(n-1)) then
+            ret := f_low_s(n);
         else
-            if and_reduce(aa(aa'length-2 downto n-1))='0' then
-                bb := (others=>'0');
-            else
-                bb := aa(n-2 downto 0);
-            end if;
+            ret := aa(n-1 downto 0);
         end if;
-        return sign & bb;
+        return ret;
     end function;
+
+    -- function f_clip(a: in unsigned; constant n: in natural) return unsigned is
+    --     alias aa : unsigned(a'length-1 downto 0) is a;
+    --     variable bb: unsigned(n-1 downto 0);
+    -- begin
+    --     -- reduction OR
+    --     if or_reduce(aa(aa'length-1 downto n))='1' then
+    --         bb := (others=>'1');
+    --     else
+    --         bb := aa(n-1 downto 0);
+    --     end if;
+    --     return bb;
+    -- end function;
+    -- function f_clip(a: in signed; constant n: in natural) return signed is
+    --     alias aa : signed(a'length-1 downto 0) is a;
+    --     variable sign: std_logic;
+    --     variable bb: signed(n-2 downto 0);
+    -- begin
+    --     sign := aa(aa'length-1); -- sign
+    --     if sign='0' then -- >0
+    --         if or_reduce(aa(aa'length-2 downto n-1))='1' then
+    --             bb := (others=>'1');
+    --         else
+    --             bb := aa(n-2 downto 0);
+    --         end if;
+    --     else
+    --         if and_reduce(aa(aa'length-2 downto n-1))='0' then
+    --             bb := (others=>'0');
+    --         else
+    --             bb := aa(n-2 downto 0);
+    --         end if;
+    --     end if;
+    --     return sign & bb;
+    -- end function;
 
     -- truncate, sM.N to sM
     function f_truncate(a: signed; constant len: natural) return signed is

@@ -1,6 +1,3 @@
---[KNOCK]
--- Design arithmetic calc selector, use signed/unsigned. and Design Library.
-
 library ieee;
 library std;
 library work;
@@ -62,10 +59,10 @@ architecture SIM of test_numeric_lib1 is
 begin
     process is
         variable show_result: boolean := False;
-        variable s_a: signed(LEN_A-1 downto  0);
-        variable s_b: signed(LEN_B-1 downto  0);
-        variable u_a: unsigned(LEN_A-1 downto  0);
-        variable u_b: unsigned(LEN_B-1 downto  0);
+        variable s_a: signed(LEN_A-1 downto 0);
+        variable s_b: signed(LEN_B-1 downto 0);
+        variable u_a: unsigned(LEN_A-1 downto 0);
+        variable u_b: unsigned(LEN_B-1 downto 0);
 
         variable add_len: natural := 0;
         variable sub_len: natural := 0;
