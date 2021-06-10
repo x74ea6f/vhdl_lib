@@ -28,6 +28,8 @@ package debug_lib is
 
     type print_t is protected
         procedure print_core(str: string; end_line: boolean:=True);
+        -- for library debug only
+        procedure check_line(l_str: in string);
     end protected;
 
     shared variable SP: print_t;
@@ -136,13 +138,22 @@ package body debug_lib is
     type print_t is protected body 
         -- print
         variable l: line; -- shared Line
+        variable l_pre: line; -- previous line for debug
 
         procedure print_core(str: string; end_line: boolean:=True) is
         begin
             write(l, str);
             if end_line = True then
+                l_pre := l;
                 writeline(output, l);
             end if;
+        end procedure;
+
+        -- for library debug only
+        procedure check_line(l_str: in string)is
+        begin
+            -- report "Data=" & l_pre.all & ", Exp=" & l_str;
+            assert l_pre.all = l_str report "Compare NG, Data=" & l_pre.all & ", Exp=" & l_str;
         end procedure;
 
     end protected body print_t;
