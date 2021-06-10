@@ -15,15 +15,20 @@ use work.debug_lib.all;
 
 entity test_numeric_lib1 is
     generic(
-        DTW: integer := 8
+        LEN_A: positive := 5;
+        LEN_B: positive := 4
     );
 end entity;
 
 architecture SIM of test_numeric_lib1 is
-    constant U_MIN : integer := 0;
-    constant U_MAX : integer := 2**DTW-1;
-    constant S_MIN : integer := -(2**(DTW-1));
-    constant S_MAX : integer := (2**(DTW-1))-1;
+    constant U_MIN_A : integer := 0;
+    constant U_MAX_A : integer := 2**LEN_A-1;
+    constant S_MIN_A : integer := -(2**(LEN_A-1));
+    constant S_MAX_A : integer := (2**(LEN_A-1))-1;
+    constant U_MIN_B : integer := 0;
+    constant U_MAX_B : integer := 2**LEN_B-1;
+    constant S_MIN_B : integer := -(2**(LEN_B-1));
+    constant S_MAX_B : integer := (2**(LEN_B-1))-1;
 
     procedure check(data: signed; exp: signed; msg:string:=""; show_result:boolean:=false) is
     begin
@@ -57,56 +62,82 @@ architecture SIM of test_numeric_lib1 is
 begin
     process is
         variable show_result: boolean := False;
-        variable s_a, s_b: signed(DTW-1 downto  0);
-        variable u_a, u_b: unsigned(DTW-1 downto  0);
-        variable slv_a, slv_b: std_logic_vector(DTW-1 downto  0);
+        variable s_a: signed(LEN_A-1 downto  0);
+        variable s_b: signed(LEN_B-1 downto  0);
+        variable u_a: unsigned(LEN_A-1 downto  0);
+        variable u_b: unsigned(LEN_B-1 downto  0);
+
+        variable add_len: natural := 0;
+        variable sub_len: natural := 0;
+        variable mul_len: natural := 0;
+        variable div_len: natural := 0;
     begin
         print("Test numeric_lib");
 
-        for i in U_MIN to U_MAX loop
-        for k in U_MIN to U_MAX loop
-            u_a:= to_unsigned(i, DTW);
-            u_b:= to_unsigned(k, DTW);
-            check(f_add(u_a, u_b), to_unsigned(i+k, DTW+1), "f_add_u", show_result);
-            check(f_sub(u_a, u_b), to_signed(i-k, DTW+1), "f_sub_u", show_result);
-            check(f_mul(u_a, u_b), to_unsigned(i*k, DTW*2), "f_mul_u", show_result);
-            check(f_div(u_a, u_b), to_unsigned(clip_int(div_int(i,k), DTW+1), DTW), "f_div_u", show_result);
+        print("unsigned, unsigned");
+        add_len := maximum(LEN_A, LEN_B) + 1;
+        sub_len := maximum(LEN_A, LEN_B) + 1;
+        mul_len := LEN_A + LEN_B;
+        div_len := LEN_A;
+        for i in U_MIN_A to U_MAX_A loop
+        for k in U_MIN_B to U_MAX_B loop
+            u_a:= to_unsigned(i, LEN_A);
+            u_b:= to_unsigned(k, LEN_B);
+            check(f_add(u_a, u_b), to_unsigned(i+k, add_len), "f_add_u", show_result);
+            check(f_sub(u_a, u_b), to_signed(i-k, sub_len), "f_sub_u", show_result);
+            check(f_mul(u_a, u_b), to_unsigned(i*k, mul_len), "f_mul_u", show_result);
+            check(f_div(u_a, u_b), to_unsigned(clip_int(div_int(i,k), div_len+1), div_len), "f_div_u", show_result);
         end loop;
         end loop;
 
-        for i in U_MIN to U_MAX loop
-        for k in S_MIN to S_MAX loop
-            u_a:= to_unsigned(i, DTW);
-            s_b:= to_signed(k, DTW);
+        print("unsigned, signed");
+        add_len := maximum(LEN_A, LEN_B) + 1;
+        sub_len := maximum(LEN_A, LEN_B) + 1;
+        mul_len := LEN_A + LEN_B;
+        div_len := LEN_A+1;
+        for i in U_MIN_A to U_MAX_A loop
+        for k in S_MIN_B to S_MAX_B loop
+            u_a:= to_unsigned(i, LEN_A);
+            s_b:= to_signed(k, LEN_B);
             -- print("A=" + u_a & ", B=" + s_b);
-            check(f_add(u_a, s_b), to_signed(i+k, DTW+1), "f_add_us", show_result);
-            check(f_sub(u_a, s_b), to_signed(i-k, DTW+1), "f_sub_us", show_result);
-            check(f_mul(u_a, s_b), to_signed(i*k, DTW*2), "f_mul_us", show_result);
-            check(f_div(u_a, s_b), to_signed(clip_int(div_int(i,k), DTW+1), DTW+1), "f_div_us", show_result);
+            check(f_add(u_a, s_b), to_signed(i+k, add_len), "f_add_us", show_result);
+            check(f_sub(u_a, s_b), to_signed(i-k, sub_len), "f_sub_us", show_result);
+            check(f_mul(u_a, s_b), to_signed(i*k, mul_len), "f_mul_us", show_result);
+            check(f_div(u_a, s_b), to_signed(clip_int(div_int(i,k), div_len), div_len), "f_div_us", show_result);
         end loop;
         end loop;
 
-        for i in S_MIN to S_MAX loop
-        for k in U_MIN to U_MAX loop
-            s_a:= to_signed(i, DTW);
-            u_b:= to_unsigned(k, DTW);
+        print("signed, unsigned");
+        add_len := maximum(LEN_A, LEN_B) + 1;
+        sub_len := maximum(LEN_A, LEN_B) + 1;
+        mul_len := LEN_A + LEN_B;
+        div_len := LEN_A;
+        for i in S_MIN_A to S_MAX_A loop
+        for k in U_MIN_B to U_MAX_B loop
+            s_a:= to_signed(i, LEN_A);
+            u_b:= to_unsigned(k, LEN_B);
             -- print("A=" + s_a & ", B=" + u_b);
-            check(f_add(s_a, u_b), to_signed(i+k, DTW+1), "f_add_su", show_result);
-            check(f_sub(s_a, u_b), to_signed(i-k, DTW+1), "f_sub_su", show_result);
-            check(f_mul(s_a, u_b), to_signed(i*k, DTW*2), "f_mul_su", show_result);
-            check(f_div(s_a, u_b), to_signed(clip_int(div_int(i,k), DTW), DTW), "f_div_su", show_result);
+            check(f_add(s_a, u_b), to_signed(i+k, add_len), "f_add_su", show_result);
+            check(f_sub(s_a, u_b), to_signed(i-k, sub_len), "f_sub_su", show_result);
+            check(f_mul(s_a, u_b), to_signed(i*k, mul_len), "f_mul_su", show_result);
+            check(f_div(s_a, u_b), to_signed(clip_int(div_int(i,k), div_len), div_len), "f_div_su", show_result);
         end loop;
         end loop;
 
-        for i in S_MIN to S_MAX loop
-        for k in S_MIN to S_MAX loop
-            s_a:= to_signed(i, DTW);
-            s_b:= to_signed(k, DTW);
+        print("signed, signed");
+        add_len := maximum(LEN_A, LEN_B) + 1;
+        sub_len := maximum(LEN_A, LEN_B) + 1;
+        mul_len := LEN_A + LEN_B;
+        div_len := LEN_A + 1;
+        for i in S_MIN_A to S_MAX_A loop
+        for k in S_MIN_B to S_MAX_B loop
+            s_a:= to_signed(i, LEN_A);
+            s_b:= to_signed(k, LEN_B);
             -- print("A=" + s_a & ", B=" + s_b);
-            check(f_add(s_a, s_b), to_signed(i+k, DTW+1), "f_add_s", show_result);
-            check(f_sub(s_a, s_b), to_signed(i-k, DTW+1), "f_sub_s", show_result);
-            check(f_mul(s_a, s_b), to_signed(i*k, DTW*2), "f_mul_s", show_result);
-            check(f_div(s_a, s_b), to_signed(clip_int(div_int(i,k), DTW+1), DTW+1), "f_div_s", show_result);
+            check(f_add(s_a, s_b), to_signed(i+k, add_len), "f_add_s", show_result);
+            check(f_sub(s_a, s_b), to_signed(i-k, sub_len), "f_sub_s", show_result);
+            check(f_mul(s_a, s_b), to_signed(i*k, mul_len), "f_mul_s", show_result);
+            check(f_div(s_a, s_b), to_signed(clip_int(div_int(i,k), div_len), div_len), "f_div_s", show_result);
         end loop;
         end loop;
 
