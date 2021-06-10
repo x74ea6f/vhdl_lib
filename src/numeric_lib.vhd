@@ -65,7 +65,6 @@ package numeric_lib is
     --```
     -- Div
     --```
-    --[TODO]
     -- uL / uM = uL
     function f_div(a: in unsigned; b: in unsigned) return unsigned;
     function f_div_u(a,b: in std_logic_vector) return std_logic_vector;
@@ -274,19 +273,69 @@ package body numeric_lib is
         return std_logic_vector(f_mul(signed(a), signed(b)));
     end function;
 
+
+    --```
+    -- high, low: Like integer'high, integer'low
+    --```
+    function f_high_s(constant n: positive) return signed is
+        variable ret : signed(n-1 downto 0);
+    begin
+        ret := (ret'high=>'0', others=>'1');
+        return ret;
+    end function;
+
+    function f_low_s(constant n: positive) return signed is
+        variable ret : signed(n-1 downto 0);
+    begin
+        ret := (ret'high=>'1', others=>'0');
+        return ret;
+    end function;
+
+    function f_zero_s(constant n: positive) return signed is
+        variable ret : signed(n-1 downto 0);
+    begin
+        ret := (others=>'0');
+        return ret;
+    end function;
+
+    function f_high_u(constant n: positive) return unsigned is
+        variable ret : unsigned(n-1 downto 0);
+    begin
+        ret := (others=>'1');
+        return ret;
+    end function;
+
+    function f_low_u(constant n: positive) return unsigned is
+        variable ret : unsigned(n-1 downto 0);
+    begin
+        ret := (others=>'0');
+        return ret;
+    end function;
+
+    function f_zero_u(constant n: positive) return unsigned is
+        variable ret : unsigned(n-1 downto 0);
+    begin
+        ret := (others=>'0');
+        return ret;
+    end function;
+
     --```
     -- Div
     -- 0/0=0, +n/0=+Max, -n/0=-Max
+    -- (*) 除数がsignedの時のビット幅は, 被除数のビット幅+1。
+    -- uL/sM = s(L+1), sL/sM=s(L+1)
+    -- 例として、両者が4bitの時、下記のように1bit増える。
+    -- (u4/s3), 15/-1=-15, (s4)
+    -- (s3/s3), -8/-1=8, (s4)
     --```
 
---TODO
     -- uL / uM = uL
     function f_div(a: in unsigned; b: in unsigned) return unsigned is
         variable res: unsigned(a'length-1 downto 0);
     begin
         if b = 0 then
-            if a > 0 then res := (others=>'1'); -- Max
-            else res := (others=>'0'); -- a=0, 0
+            if a > 0 then res := f_high_u(res'length); -- Max
+            else res := f_low_u(res'length); -- a=0, 0
             end if;
         else 
             res := a / b;
@@ -305,8 +354,8 @@ package body numeric_lib is
         variable res: signed(a'length downto 0);
     begin
         if b = 0 then
-            if a > 0 then res := (res'left=>'0', others=>'1'); -- Max
-            else res := (others=>'0'); -- a=0, 0
+            if a > 0 then res := f_high_s(res'length); -- Max
+            else res := f_zero_s(res'length); -- a=0, 0
             end if;
         else 
             res := signed('0' & a) / signed(b);
@@ -324,9 +373,9 @@ package body numeric_lib is
         variable res: signed(a'length-1 downto 0);
     begin
         if b = 0 then
-            if a > 0 then res := (res'left=>'0', others=>'1'); -- Max
-            elsif a < 0 then res := (res'left=>'1', others=>'0'); -- Min
-            else res := (others=>'0'); -- a=0, 0
+            if a > 0 then res := f_high_s(res'length); -- Max
+            elsif a < 0 then res := f_low_s(res'length); -- Min
+            else res := f_zero_s(res'length); -- a=0, 0
             end if;
         else 
             res := signed(a) / signed('0' & b);
@@ -339,15 +388,14 @@ package body numeric_lib is
         return std_logic_vector(f_div(signed(a), unsigned(b)));
     end function;
 
---TODO
     -- sL / sM = s(L+1)
     function f_div(a: in signed; b: in signed) return signed is
         variable res: signed(a'length downto 0);
     begin
         if b = 0 then
-            if a > 0 then res := (res'left=>'0', others=>'1'); -- Max
-            elsif a < 0 then res := (res'left=>'1', others=>'0'); -- Min
-            else res := (others=>'0'); -- a=0, 0
+            if a > 0 then res := f_high_s(res'length); -- Max
+            elsif a < 0 then res := f_low_s(res'length); -- Min
+            else res := f_zero_s(res'length); -- a=0, 0
             end if;
         else 
             res := resize(a, a'length+1) / resize(b, b'length+1);

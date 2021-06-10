@@ -15,7 +15,7 @@ use work.debug_lib.all;
 
 entity test_numeric_lib1 is
     generic(
-        DTW: integer := 4
+        DTW: integer := 8
     );
 end entity;
 
@@ -70,7 +70,7 @@ begin
             check(f_add(u_a, u_b), to_unsigned(i+k, DTW+1), "f_add_u", show_result);
             check(f_sub(u_a, u_b), to_signed(i-k, DTW+1), "f_sub_u", show_result);
             check(f_mul(u_a, u_b), to_unsigned(i*k, DTW*2), "f_mul_u", show_result);
-            check(f_div(u_a, u_b), to_unsigned(clip_int(div_int(i,k), DTW+1), DTW), "f_mul_u", show_result);
+            check(f_div(u_a, u_b), to_unsigned(clip_int(div_int(i,k), DTW+1), DTW), "f_div_u", show_result);
         end loop;
         end loop;
 
@@ -82,7 +82,7 @@ begin
             check(f_add(u_a, s_b), to_signed(i+k, DTW+1), "f_add_us", show_result);
             check(f_sub(u_a, s_b), to_signed(i-k, DTW+1), "f_sub_us", show_result);
             check(f_mul(u_a, s_b), to_signed(i*k, DTW*2), "f_mul_us", show_result);
-            check(f_div(u_a, s_b), to_signed(clip_int(div_int(i,k), DTW+1), DTW+1), "f_mul_us", show_result);
+            check(f_div(u_a, s_b), to_signed(clip_int(div_int(i,k), DTW+1), DTW+1), "f_div_us", show_result);
         end loop;
         end loop;
 
@@ -94,7 +94,7 @@ begin
             check(f_add(s_a, u_b), to_signed(i+k, DTW+1), "f_add_su", show_result);
             check(f_sub(s_a, u_b), to_signed(i-k, DTW+1), "f_sub_su", show_result);
             check(f_mul(s_a, u_b), to_signed(i*k, DTW*2), "f_mul_su", show_result);
-            check(f_div(s_a, u_b), to_signed(clip_int(div_int(i,k), DTW), DTW), "f_mul_su", show_result);
+            check(f_div(s_a, u_b), to_signed(clip_int(div_int(i,k), DTW), DTW), "f_div_su", show_result);
         end loop;
         end loop;
 
@@ -106,7 +106,7 @@ begin
             check(f_add(s_a, s_b), to_signed(i+k, DTW+1), "f_add_s", show_result);
             check(f_sub(s_a, s_b), to_signed(i-k, DTW+1), "f_sub_s", show_result);
             check(f_mul(s_a, s_b), to_signed(i*k, DTW*2), "f_mul_s", show_result);
-            check(f_div(s_a, s_b), to_signed(clip_int(div_int(i,k), DTW+1), DTW+1), "f_mul_s", show_result);
+            check(f_div(s_a, s_b), to_signed(clip_int(div_int(i,k), DTW+1), DTW+1), "f_div_s", show_result);
         end loop;
         end loop;
 
