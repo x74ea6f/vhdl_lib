@@ -12,9 +12,9 @@ use work.debug_lib.all;
 
 entity test_numeric_lib2 is
     generic(
-        LEN_A: positive := 8;
+        LEN_A: positive := 4;
         LEN_CLIP: positive := 4;
-        LEN_ROUND: positive := 4
+        LEN_ROUND: positive := 2
     );
 end entity;
 
@@ -89,6 +89,37 @@ architecture SIM of test_numeric_lib2 is
         return aa;
     end function;
 
+    function round_half_up_u(a: integer; constant from_len: positive; constant to_len: positive) return integer is
+        variable div : integer;
+        variable sub : integer;
+    begin
+        div := 2**(from_len - to_len);
+        sub := div/2-1;
+        if a/div>=(2**(to_len))-1then -- for Overflow
+            return a/div;
+        else
+            return (a+div/2)/div;
+        end if;
+    end function;
+
+    function round_to_even_u(a: integer; constant from_len: positive; constant to_len: positive) return integer is
+        variable div : integer;
+        variable aa : integer;
+    begin
+        div := 2**(from_len - to_len);
+        aa := a + div/2;
+        if (aa/div)*div = aa then
+            aa := a/div;
+            aa := aa + (aa rem 2);
+        else 
+            aa := aa/div;
+        end if;
+        if aa > (2**(to_len))-1 then -- clip max
+            aa := (2**(to_len)) -1;
+        end if;
+        return aa;
+    end function;
+
 begin
     process is
         variable show_result: boolean := False;
@@ -101,7 +132,7 @@ begin
 
         for i in U_MIN_A to U_MAX_A loop
             u_a := to_unsigned(i, LEN_A);
-            -- print("A=" + u_a);
+            print("A=" + u_a);
 
             exp_sl := '0' when (i=0) else '1';
             check(f_or_reduce(u_a), exp_sl , "or_reduce_u", show_result);
@@ -110,6 +141,9 @@ begin
 
             check(f_clip(u_a, LEN_CLIP), to_unsigned(clip_int(i, LEN_CLIP+1), LEN_CLIP) , "clip_u", show_result);
 
+            check(f_truncate(u_a, LEN_ROUND), to_unsigned(truncate_int(i, LEN_A, LEN_ROUND), LEN_ROUND), "truncate_u", show_result);
+            check(f_round_half_up(u_a, LEN_ROUND), to_unsigned(round_half_up_u(i, LEN_A, LEN_ROUND), LEN_ROUND) , "round_half_up_u", show_result);
+            check(f_round_to_even(u_a, LEN_ROUND), to_unsigned(round_to_even_u(i, LEN_A, LEN_ROUND), LEN_ROUND) , "round_to_even_u", true);
         end loop;
 
         for i in S_MIN_A to S_MAX_A loop
