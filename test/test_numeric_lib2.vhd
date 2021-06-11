@@ -14,7 +14,7 @@ entity test_numeric_lib2 is
     generic(
         LEN_A: positive := 8;
         LEN_CLIP: positive := 4;
-        LEN_ROUND: positive := 7
+        LEN_ROUND: positive := 4
     );
 end entity;
 
@@ -28,16 +28,6 @@ architecture SIM of test_numeric_lib2 is
     begin
         check(std_logic_vector'('0'&data), std_logic_vector'('0'&exp), msg, show_result);
     end procedure;
-
-    -- procedure check(data, exp: signed; msg:string:=""; show_result:boolean:=false) is
-    -- begin
-    --     check(std_logic_vector(data), std_logic_vector(exp), msg, show_result);
-    -- end procedure;
-
-    -- procedure check(data, exp: unsigned; msg:string:=""; show_result:boolean:=false) is
-    -- begin
-    --     check(std_logic_vector(data), std_logic_vector(exp), msg, show_result);
-    -- end procedure;
 
     function clip_int(a: integer; constant n: positive) return integer is
         variable m: natural;
@@ -62,6 +52,41 @@ architecture SIM of test_numeric_lib2 is
         if a<0 then return a/div;
         else return a/div;
         end if;
+    end function;
+
+    function round_half_up(a: integer; constant from_len: positive; constant to_len: positive) return integer is
+        variable div : integer;
+        variable sub : integer;
+    begin
+        div := 2**(from_len - to_len);
+        sub := div/2-1;
+        if a<0 then
+            return (a-div/2+1)/div;
+        else 
+            if a/div>=(2**(to_len-1))-1then -- for Overflow
+                return a/div;
+            else
+                return (a+div/2)/div;
+            end if;
+        end if;
+    end function;
+
+    function round_to_even(a: integer; constant from_len: positive; constant to_len: positive) return integer is
+        variable div : integer;
+        variable aa : integer;
+    begin
+        div := 2**(from_len - to_len);
+        aa := a + div/2 when a>0 else a - div/2;
+        if (aa/div)*div = aa then
+            aa := a/div;
+            aa := aa + (aa rem 2);
+        else 
+            aa := aa/div;
+        end if;
+        if aa > (2**(to_len-1))-1 then -- clip max
+            aa := (2**(to_len-1)) -1;
+        end if;
+        return aa;
     end function;
 
 begin
@@ -89,7 +114,7 @@ begin
 
         for i in S_MIN_A to S_MAX_A loop
             s_a:= to_signed(i, LEN_A);
-            print("A=" + s_a);
+            -- print("A=" + s_a);
 
             exp_sl := '0' when (i=0) else '1';
             check(f_or_reduce(s_a), exp_sl , "or_reduce_s", show_result);
@@ -99,9 +124,9 @@ begin
             check(f_clip(s_a, LEN_CLIP), to_signed(clip_int(i, LEN_CLIP), LEN_CLIP) , "clip_s", show_result);
 
             check(f_truncate(s_a, LEN_ROUND), to_signed(truncate_int(i, LEN_A, LEN_ROUND), LEN_ROUND), "truncate_s", show_result);
-            check(f_round_toward_zero(s_a, LEN_ROUND), to_signed(round_toward_zero(i, LEN_A, LEN_ROUND), LEN_ROUND), "round_toward_zero", true);
-            -- check(f_round_half_up(s_a, LEN_ROUND), to_signed(i, LEN_A, LEN_ROUND), "round_half_up", show_result);
-            -- check(f_round_to_even(s_a, LEN_ROUND), to_signed(i, LEN_A, LEN_ROUND), "round_to_even", show_result);
+            check(f_round_toward_zero(s_a, LEN_ROUND), to_signed(round_toward_zero(i, LEN_A, LEN_ROUND), LEN_ROUND), "round_toward_zero", show_result);
+            check(f_round_half_up(s_a, LEN_ROUND), to_signed(round_half_up(i, LEN_A, LEN_ROUND), LEN_ROUND) , "round_half_up", show_result);
+            check(f_round_to_even(s_a, LEN_ROUND), to_signed(round_to_even(i, LEN_A, LEN_ROUND), LEN_ROUND) , "round_to_even", show_result);
         end loop;
 
         finish(0);

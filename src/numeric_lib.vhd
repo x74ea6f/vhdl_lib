@@ -521,26 +521,15 @@ package body numeric_lib is
     function f_round_toward_zero(a: signed; constant len: natural) return signed is
         alias aa: signed(a'length-1 downto 0) is a; -- sM.N
         variable aa_up: signed(len-1 downto 0); -- sM
-        variable add: std_logic; -- 1bit
-        variable sum: signed(len-1 downto 0); -- sM
+        variable add: signed(a'length - len downto 0); -- s.N
+        variable sum: signed(a'length downto 0); -- s(M+1).N
     begin
         aa_up := aa(a'length-1 downto a'length-len); -- sM
-        add := aa(a'length - len -1) when aa(a'length-1)='1' else '0'; -- 0 or 1
-        sum := aa_up + add; -- sM
-        return sum; -- sM
+        add := (add'length-1=>'0', others=>aa(aa'length-1)); -- {s,{N{s}}}
+        -- add := (others=>'0') when aa_up=f_low_s(aa_up'length) else add; -- for clip Min
+        sum := resize(aa, sum'length) + resize(add, sum'length); -- s(M+1).N
+        return sum(aa'length-1 downto aa'length-len); -- sM
     end function;
-    -- function f_round_toward_zero(a: signed; constant len: natural) return signed is
-    --     alias aa: signed(a'length-1 downto 0) is a; -- sM.N
-    --     variable aa_up: signed(len-1 downto 0); -- sM
-    --     variable add: signed(a'length - len downto 0); -- s.N
-    --     variable sum: signed(a'length downto 0); -- s(M+1).N
-    -- begin
-    --     aa_up := aa(a'length-1 downto a'length-len); -- sM
-    --     add := (add'length-1=>'0', others=>aa(aa'length-1)); -- {s,{N{s}}}
-    --     -- add := (others=>'0') when aa_up=f_low_s(aa_up'length) else add; -- for clip Min
-    --     sum := resize(aa, sum'length) + resize(add, sum'length); -- s(M+1).N
-    --     return sum(aa'length-1 downto aa'length-len); -- sM
-    -- end function;
 
     -- round half up, sM.N to sM
     -- 0: trunc, 1: up
