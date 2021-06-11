@@ -127,6 +127,8 @@ package debug_lib is
     -- Assert check Expedcted data.
     -- ```
     procedure check(data, exp: std_logic_vector; msg:string:=""; show_result:boolean:=false);
+    procedure check(data, exp: unsigned; msg:string:=""; show_result:boolean:=false);
+    procedure check(data, exp: signed; msg:string:=""; show_result:boolean:=false);
 
 
 end package;
@@ -550,18 +552,50 @@ package body debug_lib is
     -- ```
     -- Assert check Expedcted data.
     -- ```
-    procedure check(data, exp: std_logic_vector; msg:string:=""; show_result:boolean:=false) is
+    procedure check_len(data, exp: integer; msg:string:=""; show_result:boolean:=false) is
         variable prefix: string(1 to msg'length+8);
         variable sp: positive := 1;
     begin
         prefix:= "[" &msg & "] Data=";
         sp:= 4 when msg'length=0 else 1; -- if nothing message, remove [].
-        if show_result=True and data=exp then
-            print(prefix(sp to prefix'right) + data & ", Exp=" + exp);
-        end if;
+
         assert data=exp
-        report "Not match: " & prefix(sp to prefix'right) + data & ", Exp=" + exp
+        report "Length not match: " & prefix(sp to prefix'right) + data & ", Exp=" + exp
         severity ERROR;
+    end procedure;
+
+    procedure check_data(data, exp: string; msg:string:=""; show_result:boolean:=false) is
+        variable prefix: string(1 to msg'length+8);
+        variable sp: positive := 1;
+    begin
+        prefix:= "[" &msg & "] Data=";
+        sp:= 4 when msg'length=0 else 1; -- if nothing message, remove [].
+
+        if show_result=True and data=exp then
+            print(prefix(sp to prefix'right)  & data & ", Exp=" & exp);
+        end if;
+
+        assert data=exp
+        report "Data not match: " & prefix(sp to prefix'right) & data & ", Exp=" & exp
+        severity ERROR;
+    end procedure;
+
+    procedure check(data, exp: std_logic_vector; msg:string:=""; show_result:boolean:=false) is
+    begin
+        check_len(data'length, exp'length, msg, show_result);
+        check_data(to_str(data), to_str(exp), msg, show_result);
+    end procedure;
+
+    procedure check(data, exp: unsigned; msg:string:=""; show_result:boolean:=false) is
+    begin
+        check_len(data'length, exp'length, msg, show_result);
+        check_data(to_str(data), to_str(exp), msg, show_result);
+    end procedure;
+
+    procedure check(data, exp: signed; msg:string:=""; show_result:boolean:=false) is
+    begin
+        check_len(data'length, exp'length, msg, show_result);
+        check_data(to_str(data), to_str(exp), msg, show_result);
     end procedure;
 
 end package body;
