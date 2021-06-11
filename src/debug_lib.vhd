@@ -104,6 +104,23 @@ package debug_lib is
     function "+" (l: string; r: signed) return string;
     function "+" (l: string; r: unsigned) return string;
 
+    --[TODO]
+    function "/" (l: string; r: bit) return string;
+    function "/" (l: string; r: boolean) return string;
+    function "/" (l: string; r: integer) return string;
+    function "/" (l: string; r: real) return string;
+    function "/" (l: string; r: time) return string;
+    function "/" (l: string; r: std_logic) return string;
+
+    function "/" (l: string; r: bit_vector) return string;
+    function "/" (l: string; r: boolean_vector) return string;
+    function "/" (l: string; r: integer_vector) return string;
+    function "/" (l: string; r: real_vector) return string;
+    function "/" (l: string; r: time_vector) return string;
+    function "/" (l: string; r: std_logic_vector) return string;
+    function "/" (l: string; r: signed) return string;
+    function "/" (l: string; r: unsigned) return string;
+
     -- ```
     -- Random
     -- ```
@@ -410,88 +427,40 @@ package body debug_lib is
     -- String + 
     -- ```
 
-    -- string + bit
-    function "+" (l: string; r: bit) return string is
-    begin
-        return l & to_str(r);
-    end function;
+    function "+" (l: string; r: bit) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: boolean) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: integer) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: real) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: time) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: std_logic) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: bit_vector) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: boolean_vector) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: integer_vector) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: real_vector) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: time_vector) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: std_logic_vector) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: unsigned) return string is begin return l & to_str(r); end function;
+    function "+" (l: string; r: signed) return string is begin return l & to_str(r); end function;
 
-    -- string + boolean
-    function "+" (l: string; r: boolean) return string is
-    begin
-        return l & to_str(r);
-    end function;
+    --[TODO]
+    -- ```
+    -- String / 
+    -- ```
 
-    -- string + integer
-    function "+" (l: string; r: integer) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + real
-    function "+" (l: string; r: real) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + time
-    function "+" (l: string; r: time) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + std_logic
-    function "+" (l: string; r: std_logic) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + bit_vector
-    function "+" (l: string; r: bit_vector) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + boolean_vector
-    function "+" (l: string; r: boolean_vector) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + integer_vector
-    function "+" (l: string; r: integer_vector) return string is
-    begin
-        return l & to_str(r);
-    end function;
-    -- string + real_vector
-    function "+" (l: string; r: real_vector) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + time_vector
-    function "+" (l: string; r: time_vector) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + std_logic_vector
-    function "+" (l: string; r: std_logic_vector) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + unsigned
-    function "+" (l: string; r: unsigned) return string is
-    begin
-        return l & to_str(r);
-    end function;
-
-    -- string + signed
-    function "+" (l: string; r: signed) return string is
-    begin
-        return l & to_str(r);
-    end function;
+    function "/" (l: string; r: bit) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: boolean) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: integer) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: real) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: time) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: std_logic) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: bit_vector) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: boolean_vector) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: integer_vector) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: real_vector) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: time_vector) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: std_logic_vector) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: unsigned) return string is begin return l & "," & to_str(r); end function;
+    function "/" (l: string; r: signed) return string is begin return l & "," & to_str(r); end function;
 
     -- ```
     -- Random

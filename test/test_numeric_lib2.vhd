@@ -100,6 +100,7 @@ begin
         print("Test numeric_lib");
         print("LEN_A=" + LEN_A & ", LEN_CLIP=" + LEN_CLIP & ", LEN_ROUND=" + LEN_ROUND);
 
+        print("unsigned");
         for i in U_MIN_A to U_MAX_A loop
             u_a := to_unsigned(i, LEN_A);
             -- print("A=" + u_a);
@@ -122,8 +123,14 @@ begin
             check(f_round_to_even(u_a, LEN_ROUND),
                 to_unsigned(round_to_even(i, LEN_A+1, LEN_ROUND+1), LEN_ROUND) ,
                 "round_to_even_u", show_result);
+
+            print(to_str(u_a)
+                / f_truncate(u_a, LEN_ROUND)
+                / f_round_half_up(u_a, LEN_ROUND)
+                / f_round_to_even(u_a, LEN_ROUND));
         end loop;
 
+        print("signed");
         for i in S_MIN_A to S_MAX_A loop
             s_a:= to_signed(i, LEN_A);
             -- print("A=" + s_a);
