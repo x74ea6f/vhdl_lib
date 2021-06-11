@@ -14,7 +14,7 @@ entity test_numeric_lib2 is
     generic(
         LEN_A: positive := 8;
         LEN_CLIP: positive := 4;
-        LEN_ROUND: positive := 3
+        LEN_ROUND: positive := 7
     );
 end entity;
 
@@ -55,6 +55,15 @@ architecture SIM of test_numeric_lib2 is
         end if;
     end function;
 
+    function round_toward_zero(a: integer; constant from_len: positive; constant to_len: positive) return integer is
+        variable div : integer;
+    begin
+        div := 2**(from_len - to_len);
+        if a<0 then return a/div;
+        else return a/div;
+        end if;
+    end function;
+
 begin
     process is
         variable show_result: boolean := False;
@@ -80,7 +89,7 @@ begin
 
         for i in S_MIN_A to S_MAX_A loop
             s_a:= to_signed(i, LEN_A);
-            -- print("A=" + s_a);
+            print("A=" + s_a);
 
             exp_sl := '0' when (i=0) else '1';
             check(f_or_reduce(s_a), exp_sl , "or_reduce_s", show_result);
@@ -90,11 +99,10 @@ begin
             check(f_clip(s_a, LEN_CLIP), to_signed(clip_int(i, LEN_CLIP), LEN_CLIP) , "clip_s", show_result);
 
             check(f_truncate(s_a, LEN_ROUND), to_signed(truncate_int(i, LEN_A, LEN_ROUND), LEN_ROUND), "truncate_s", show_result);
-            -- check(f_round_toward_zero(s_a, LEN_ROUND), to_signed(i, LEN_A, LEN_ROUND), "round_toward_zero", show_result);
+            check(f_round_toward_zero(s_a, LEN_ROUND), to_signed(round_toward_zero(i, LEN_A, LEN_ROUND), LEN_ROUND), "round_toward_zero", true);
             -- check(f_round_half_up(s_a, LEN_ROUND), to_signed(i, LEN_A, LEN_ROUND), "round_half_up", show_result);
             -- check(f_round_to_even(s_a, LEN_ROUND), to_signed(i, LEN_A, LEN_ROUND), "round_to_even", show_result);
         end loop;
-
 
         finish(0);
     end process;
