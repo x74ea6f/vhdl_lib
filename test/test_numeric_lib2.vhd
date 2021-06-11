@@ -89,37 +89,6 @@ architecture SIM of test_numeric_lib2 is
         return aa;
     end function;
 
-    -- function round_half_up_u(a: integer; constant from_len: positive; constant to_len: positive) return integer is
-    --     variable div : integer;
-    --     variable sub : integer;
-    -- begin
-    --     div := 2**(from_len - to_len);
-    --     sub := div/2-1;
-    --     if a/div>=(2**(to_len))-1then -- for Overflow
-    --         return a/div;
-    --     else
-    --         return (a+div/2)/div;
-    --     end if;
-    -- end function;
-
-    -- function round_to_even_u(a: integer; constant from_len: positive; constant to_len: positive) return integer is
-    --     variable div : integer;
-    --     variable aa : integer;
-    -- begin
-    --     div := 2**(from_len - to_len);
-    --     aa := a + div/2;
-    --     if (aa/div)*div = aa then
-    --         aa := a/div;
-    --         aa := aa + (aa rem 2);
-    --     else 
-    --         aa := aa/div;
-    --     end if;
-    --     if aa > (2**(to_len))-1 then -- clip max
-    --         aa := (2**(to_len)) -1;
-    --     end if;
-    --     return aa;
-    -- end function;
-
 begin
     process is
         variable show_result: boolean := False;
@@ -129,6 +98,7 @@ begin
         variable exp_sl: std_logic;
     begin
         print("Test numeric_lib");
+        print("LEN_A=" + LEN_A & ", LEN_CLIP=" + LEN_CLIP & ", LEN_ROUND=" + LEN_ROUND);
 
         for i in U_MIN_A to U_MAX_A loop
             u_a := to_unsigned(i, LEN_A);
@@ -148,11 +118,9 @@ begin
                 "truncate_u", show_result);
             check(f_round_half_up(u_a, LEN_ROUND),
                 to_unsigned(round_half_up(i, LEN_A+1, LEN_ROUND+1), LEN_ROUND),
-                -- to_unsigned(round_half_up_u(i, LEN_A, LEN_ROUND), LEN_ROUND),
                 "round_half_up_u", show_result);
             check(f_round_to_even(u_a, LEN_ROUND),
                 to_unsigned(round_to_even(i, LEN_A+1, LEN_ROUND+1), LEN_ROUND) ,
-                -- to_unsigned(round_to_even_u(i, LEN_A, LEN_ROUND), LEN_ROUND) ,
                 "round_to_even_u", show_result);
         end loop;
 
