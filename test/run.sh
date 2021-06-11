@@ -27,7 +27,7 @@ gen=""
 while getopts g:h OPT
 do
     case $OPT in
-        g)  gen=$OPTARG
+        g)  gen="$gen -generic_top $OPTARG"
             ;;
         h)  usage "Help"
             ;;
@@ -40,11 +40,6 @@ if [ $# == 0 ]; then
     usage "Files needed"
 fi
 files=($@)
-
-## generic_top
-if [ -n  "${gen}" ]; then
-    gen="-generic_top ${gen}"
-fi
 
 ## Get top module name from last File
 top_file=${files[-1]}
