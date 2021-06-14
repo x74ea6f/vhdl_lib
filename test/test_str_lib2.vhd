@@ -8,22 +8,16 @@ use std.textio.all;
 use std.env.finish;
 
 library work;
-use work.debug_lib.all;
+use work.str_lib.all;
+use work.sim_lib.all;
 
-entity test_debug_lib5 is
+entity test_str_lib2 is
 end entity;
 
-architecture SIM of test_debug_lib5 is
-    signal clk: std_logic:= '0';
+architecture SIM of test_str_lib2 is
 begin
 
-    process begin
-        wait for 5ns;
-        clk <= not clk;
-    end process;
-
     process
-        variable exp_line: line;
     begin
         -- Test of print
         print("-- Start " & "My Library Test.");

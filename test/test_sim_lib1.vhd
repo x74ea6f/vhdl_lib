@@ -8,12 +8,13 @@ use std.textio.all;
 use std.env.finish;
 
 library work;
-use work.debug_lib.all;
+use work.str_lib.all;
+use work.sim_lib.all;
 
-entity test_debug_lib2 is
+entity test_sim_lib1 is
 end entity;
 
-architecture SIM of test_debug_lib2 is
+architecture SIM of test_sim_lib1 is
 begin
 
     process

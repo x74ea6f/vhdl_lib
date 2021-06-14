@@ -8,12 +8,12 @@ use std.textio.all;
 use std.env.finish;
 
 library work;
-use work.debug_lib.all;
+use work.str_lib.all;
 
-entity test_debug_lib1 is
+entity test_str_lib1 is
 end entity;
 
-architecture SIM of test_debug_lib1 is
+architecture SIM of test_str_lib1 is
 
     -- shared variable l: line;
     -- procedure print(str: string; end_line: boolean:=True) is
