@@ -104,7 +104,9 @@ package debug_lib is
     function "+" (l: string; r: signed) return string;
     function "+" (l: string; r: unsigned) return string;
 
-    --[TODO]
+    -- ```
+    -- String / , Add Comma for CSV File
+    -- ```
     function "/" (l: string; r: bit) return string;
     function "/" (l: string; r: boolean) return string;
     function "/" (l: string; r: integer) return string;
@@ -171,7 +173,7 @@ package body debug_lib is
         -- for library debug only
         procedure check_line(l_str: in string)is
         begin
-            report "Data=" & l_pre.all & ", Exp=" & l_str;
+            -- report "Data=" & l_pre.all & ", Exp=" & l_str;
             assert l_pre.all = l_str
             report "Compare NG, Data=" & l_pre.all & ", Exp=" & l_str
             severity ERROR;
@@ -442,11 +444,9 @@ package body debug_lib is
     function "+" (l: string; r: unsigned) return string is begin return l & to_str(r); end function;
     function "+" (l: string; r: signed) return string is begin return l & to_str(r); end function;
 
-    --[TODO]
     -- ```
-    -- String / 
+    -- String / , Add Comma for CSV File
     -- ```
-
     function "/" (l: string; r: bit) return string is begin return l & "," & to_str(r); end function;
     function "/" (l: string; r: boolean) return string is begin return l & "," & to_str(r); end function;
     function "/" (l: string; r: integer) return string is begin return l & "," & to_str(r); end function;
