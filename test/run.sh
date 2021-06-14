@@ -4,7 +4,7 @@ set -eu
 VIVADO_SETTING_PATH=/tools/Xilinx/Vivado/2020.2/settings64.sh 
 source ${VIVADO_SETTING_PATH}
 
-libfiles="../src/str_lib.vhd ../src/sim_lib.vhd ../src/numeric_lib.vhd"
+libfiles="../src/str_lib.vhd ../src/sim_lib.vhd ../src/numeric_lib.vhd ../src/file_lib.vhd"
 
 # Usage
 function usage() {
