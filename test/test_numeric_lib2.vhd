@@ -157,6 +157,11 @@ begin
                 to_signed(round_to_even(i, LEN_A, LEN_ROUND), LEN_ROUND),
                 "round_to_even", show_result);
 
+            print(to_str(s_a)
+                / f_truncate(s_a, LEN_ROUND)
+                / f_round_toward_zero(s_a, LEN_ROUND)
+                / f_round_half_up(s_a, LEN_ROUND)
+                / f_round_to_even(s_a, LEN_ROUND));
         end loop;
 
         finish(0);
