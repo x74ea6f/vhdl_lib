@@ -4,6 +4,8 @@ set -eu
 VIVADO_SETTING_PATH=/tools/Xilinx/Vivado/2020.2/settings64.sh 
 source ${VIVADO_SETTING_PATH}
 
+libfiles="../src/*.vhd"
+
 # Usage
 function usage() {
   echo $1
@@ -49,7 +51,7 @@ top=$(echo $top | sed -e "s/^[0-9]\+\.//")
 echo "TopModule is $top"
 
 ## Main
-xvhdl --2008 ${files[@]}
+xvhdl --2008 ${libfiles} ${files[@]}
 xelab --debug typical ${top} ${gen}
 xsim ${top} --tclbatch wave.tcl
 ## xsim ${top} --tempDir .tmp --tclbatch wave.tcl
