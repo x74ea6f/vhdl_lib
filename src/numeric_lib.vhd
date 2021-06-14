@@ -281,6 +281,7 @@ package body numeric_lib is
     --```
     -- high, low: Like integer'high, integer'low
     --```
+
     function f_high_s(constant n: positive) return signed is
         variable ret : signed(n-1 downto 0);
     begin

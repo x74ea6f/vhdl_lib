@@ -36,7 +36,7 @@ begin
         );
         SP.check_line("'1',true,123,1.230000e+01,'1'");
 
-        print(to_str(bit_vector'("1010")) /
+        print(to_str(bit_vector'("1010")) / -- First as String
             boolean_vector'((True, False, True, False)) /
             integer_vector'((123, -234, 345, -678)) /
             real_vector'((12.3, -23.4, 34.5, 45.6)) /
