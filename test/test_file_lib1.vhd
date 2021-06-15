@@ -26,8 +26,18 @@ begin
 
     begin
 
-        print(replace("78A9ABCDEFG", "AB", "XYZ"));
-        print(replace("789AABCDEFG", "AB", "XYZ"));
+        print(replace("ABcdefg", "AB", "012"));
+        SP.check_line("012cdefg");
+        print(replace("zzAABcdefg", "AB", "012"));
+        SP.check_line("zzA012cdefg");
+        print(replace("abcdefgAB", "AB", "012"));
+        SP.check_line("abcdefg012");
+        print(replace("abcdefgA", "AB", "012"));
+        SP.check_line("abcdefgA");
+        print(replace("ABcdefgAB", "AB", "012"));
+        SP.check_line("012cdefg012");
+        print(replace("AB", "AABB", "012"));
+        SP.check_line("AB");
 
 
         file_open(f_in, "sample_in.csv", READ_MODE);

@@ -131,35 +131,32 @@ package body file_lib is
         ln := new_ln;
     end procedure;
 
+    -- Replace string
+    -- - Naive algorithm
+    -- [文字列探索アルゴリズムとは？KMP法やBM法について解説](https://products.sint.co.jp/topsic/blog/string-searching-algorithm)
     impure function replace(str, search, rep:string) return string is
-        variable s: character;
-        variable tmp_ln: line;
         variable new_ln: line;
-        variable search_idx: integer:=1;
+        variable hit : boolean;
+        variable i: integer:= 1;
     begin
-        for i in str'range loop
-            s := str(i);
-            --[TODO]
-            if s=search(search_idx) then
-                -- print(to_str(s) / search_idx / search'length);
+        while i <= str'length loop 
+            hit := False;
+            for k in search'range loop
+                if str'right < i+k-1 then
+                    exit;
+                elsif str(i+k-1)/=search(k) then
+                    exit;
+                elsif k=search'right then
+                    hit := True;
+                end if;
+            end loop;
 
-                if search_idx=search'length then
-                    write(new_ln, rep);
-                    deallocate(tmp_ln);
-                    search_idx := 1;
-                else
-                    search_idx := search_idx + 1;
-                    write(tmp_ln, s);
-                end if;
-            elsif s=search(1) then
-                --[TODO]
+            if hit=True then
+                write(new_ln, rep);
+                i := i + search'length;
             else
-                search_idx := 1;
-                if tmp_ln/=null and tmp_ln'length/=0 then
-                    write(new_ln, tmp_ln.all);
-                    deallocate(tmp_ln);
-                end if;
-                write(new_ln, s);
+                write(new_ln, str(i));
+                i := i + 1;
             end if;
         end loop;
         return new_ln.all;

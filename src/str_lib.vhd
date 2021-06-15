@@ -26,7 +26,7 @@ package str_lib is
     type print_t is protected
         procedure print_core(str: string; end_line: boolean:=True);
         -- for library debug only
-        procedure check_line(l_str: in string);
+        procedure check_line(l_str: in string); -- for debug
     end protected;
 
     shared variable SP: print_t;
