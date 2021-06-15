@@ -124,6 +124,8 @@ package str_lib is
     function "/" (l: string; r: signed) return string;
     function "/" (l: string; r: unsigned) return string;
 
+    impure function replace(str, search, rep:string) return string;
+
 end package;
 
 package body str_lib is
@@ -443,5 +445,36 @@ package body str_lib is
     function "/" (l: string; r: std_logic_vector) return string is begin return l & "," & to_str(r); end function;
     function "/" (l: string; r: unsigned) return string is begin return l & "," & to_str(r); end function;
     function "/" (l: string; r: signed) return string is begin return l & "," & to_str(r); end function;
+
+    -- Replace string
+    -- - Naive algorithm
+    -- [文字列探索アルゴリズムとは？KMP法やBM法について解説](https://products.sint.co.jp/topsic/blog/string-searching-algorithm)
+    impure function replace(str, search, rep:string) return string is
+        variable new_ln: line;
+        variable hit : boolean;
+        variable i: integer:= 1;
+    begin
+        while i <= str'length loop 
+            hit := False;
+            for k in search'range loop
+                if str'right < i+k-1 then
+                    exit;
+                elsif str(i+k-1)/=search(k) then
+                    exit;
+                elsif k=search'right then
+                    hit := True;
+                end if;
+            end loop;
+
+            if hit=True then
+                write(new_ln, rep);
+                i := i + search'length;
+            else
+                write(new_ln, str(i));
+                i := i + 1;
+            end if;
+        end loop;
+        return new_ln.all;
+    end function;
 
 end package body;
