@@ -31,31 +31,7 @@ begin
         variable rlv: real_vector(1 to 4);
         variable slv: std_logic_vector(15 downto 0);
 
-        type a is array (natural range <>) of std_logic_vector(3 downto 0);
-
-        type c is array (natural range <>, natural range <>) of std_logic_vector(3 downto 0);
-        type d is array (natural range <>, natural range <>) of std_logic;
-
-        function get_array(n, m: natural) return d is
-            variable ret: d(0 to 4, 5 downto 0);
-        begin
-            return ret;
-        end function;
-
-        variable dd: d(0 to 2, 3 downto 0) := (
-            (X"4", X"5", X"6")
-            ); 
-        variable tmp: std_logic_vector(3 downto 0);
     begin
-
-        for i in dd'range loop
-            for j in 0 to 3 loop
-                tmp(j) := dd(i,j);
-            end loop;
-            print(to_str(i) / tmp);
-        end loop;
-
-
 
         -- txt
         file_open(f_in, file_name1, READ_MODE);

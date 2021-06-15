@@ -76,10 +76,11 @@ package str_lib is
     function to_str(v: std_logic) return string;
 
     function to_str(btv: bit_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;
-    function to_str(blv: boolean_vector) return string;
-    function to_str(intv: integer_vector; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
-    function to_str(rlv: real_vector) return string;
-    function to_str(tmv: time_vector) return string;
+    function to_str(blv: boolean_vector; append_parenthesis: boolean:=True) return string;
+    function to_str(intv: integer_vector; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE;
+        prefix: string:="0x"; append_parenthesis: boolean:=True) return string;
+    function to_str(rlv: real_vector; append_parenthesis: boolean:=True) return string;
+    function to_str(tmv: time_vector; append_parenthesis: boolean:=True) return string;
     function to_str(slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;
     function to_str(s: signed; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
     function to_str(u: unsigned; ptype: PRINT_TYPE:=UNSIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
@@ -289,8 +290,18 @@ package body str_lib is
     -- length取得のために呼び出して、string取得するため本呼び出しを、
     -- 呼び出し1回にしたい。
 
+    -- Parenthesis
+    function parenthesis(str: string; append: boolean:=True) return string is
+    begin
+        if append=True then
+            return "(" & str & ")";
+        else
+            return str;
+        end if;
+    end function;
+
     -- boolean_vector to string
-    function to_str(blv: boolean_vector) return string is
+    function to_str(blv: boolean_vector; append_parenthesis: boolean:=True) return string is
         alias v: boolean_vector(blv'length-1 downto 0) is blv;
         variable ret: string(1 to v'length*(5+1)); -- "false"+','
         variable idx: natural := 1;
@@ -306,11 +317,15 @@ package body str_lib is
                 idx := idx+1;
             end if;
         end loop;
-        return '(' & ret(1 to idx-1) & ')';
+        return parenthesis(ret(1 to idx-1), append_parenthesis);
     end function;
 
     -- integer_vector to string
-    function to_str(intv: integer_vector; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string is
+    function to_str(intv: integer_vector;
+        ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE;
+        prefix: string:="0x";
+        append_parenthesis: boolean:=True
+    ) return string is
         alias v: integer_vector(intv'length-1 downto 0) is intv;
         -- type integer is range -2147483647 to 2147483647;
         variable ret: string(1 to v'length*(32+1)); -- 32bit+1, type as BIN
@@ -327,11 +342,11 @@ package body str_lib is
                 idx := idx+1;
             end if;
         end loop;
-        return '(' & ret(1 to idx-1) & ')';
+        return parenthesis(ret(1 to idx-1), append_parenthesis);
     end function;
 
     -- real_vector to string
-    function to_str(rlv: real_vector) return string is
+    function to_str(rlv: real_vector; append_parenthesis: boolean:=True) return string is
         alias v: real_vector(rlv'length-1 downto 0) is rlv;
         -- type real is range -1.7014111e+308 to 1.7014111e+308;
         variable ret: string(1 to v'length*(15+1)); -- s1.7es3 + ","
@@ -348,11 +363,11 @@ package body str_lib is
                 idx := idx+1;
             end if;
         end loop;
-        return '(' & ret(1 to idx-1) & ')';
+        return parenthesis(ret(1 to idx-1), append_parenthesis);
     end function;
 
     -- time_vector to string
-    function to_str(tmv: time_vector) return string is
+    function to_str(tmv: time_vector; append_parenthesis: boolean:=True) return string is
         alias v: time_vector(tmv'length-1 downto 0) is tmv;
         variable ret: string(1 to tmv'length*(14+1)); -- s10+3 + ","
         variable idx: natural := 1;
@@ -368,11 +383,11 @@ package body str_lib is
                 idx := idx+1;
             end if;
         end loop;
-        return '(' & ret(1 to idx-1) & ')';
+        return parenthesis(ret(1 to idx-1), append_parenthesis);
     end function;
 
     -- std_logic_vector to string
-    function to_str(slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string is
+    function to_str( slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string is
         alias v: std_logic_vector(slv'length-1 downto 0) is slv;
     begin
         -- dont support to_hstring(bit_vector) in Vivado 2020.2.
