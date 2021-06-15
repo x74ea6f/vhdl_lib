@@ -34,6 +34,11 @@ package file_lib is
 
     shared variable FT: file_t;
 
+    procedure read(ln: inout line; intv: out integer_vector);
+    procedure comma2space(ln: inout line);
+
+    impure function replace(str, search, rep:string) return string;
+
 end package;
 
 package body file_lib is
@@ -106,5 +111,58 @@ package body file_lib is
         end procedure;
 
     end protected body file_t;
+
+    procedure read(ln: inout line; intv: out integer_vector) is
+    begin
+        for i in intv'range loop
+            read(ln, intv(i));
+        end loop;
+    end procedure;
+
+    procedure comma2space(ln: inout line) is
+        variable s: string(1 to 1);
+        variable new_ln: line;
+    begin
+        for i in ln'range loop
+            read(ln, s);
+            s := " " when s="," else s; -- "," to " "
+            write(new_ln, s);
+        end loop;
+        ln := new_ln;
+    end procedure;
+
+    impure function replace(str, search, rep:string) return string is
+        variable s: character;
+        variable tmp_ln: line;
+        variable new_ln: line;
+        variable search_idx: integer:=1;
+    begin
+        for i in str'range loop
+            s := str(i);
+            --[TODO]
+            if s=search(search_idx) then
+                -- print(to_str(s) / search_idx / search'length);
+
+                if search_idx=search'length then
+                    write(new_ln, rep);
+                    deallocate(tmp_ln);
+                    search_idx := 1;
+                else
+                    search_idx := search_idx + 1;
+                    write(tmp_ln, s);
+                end if;
+            elsif s=search(1) then
+                --[TODO]
+            else
+                search_idx := 1;
+                if tmp_ln/=null and tmp_ln'length/=0 then
+                    write(new_ln, tmp_ln.all);
+                    deallocate(tmp_ln);
+                end if;
+                write(new_ln, s);
+            end if;
+        end loop;
+        return new_ln.all;
+    end function;
 
 end package body;

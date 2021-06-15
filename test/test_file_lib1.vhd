@@ -18,38 +18,64 @@ end entity;
 architecture SIM of test_file_lib1 is
 begin
 
-    process
-        variable str: string(1 to 3);
+    process is
+        file f_in: text;
+        variable l: line;
         variable int: integer;
         variable intv: integer_vector(1 to 4);
+
     begin
-        -- Test of print
-        print("-- Start " & "My Library Test.");
 
-        FT.open_file("sample_in.txt");
-        while not FT.is_endfile loop
-            FT.read(int);
-            print(to_str(int));
-            FT.read_integer_vector(intv);
+        print(replace("78A9ABCDEFG", "AB", "XYZ"));
+        print(replace("789AABCDEFG", "AB", "XYZ"));
+
+
+        file_open(f_in, "sample_in.csv", READ_MODE);
+
+        while not endfile(f_in) loop
+            readline(f_in, l);
+            comma2space(l);
+            read(l, int);
+            print(int);
+            read(l, intv);
             print(to_str(intv));
         end loop;
-        FT.close_file;
 
-        print("csv_file");
-        FT.open_file("sample_in.csv");
-        while not FT.is_endfile loop
-            FT.read(int);
-            print(to_str(int));
-            FT.read_integer_vector(intv);
-            print(to_str(intv));
-        end loop;
-        FT.close_file;
+        finish(0);
+    end process;
+
+    -- process
+    --     variable str: string(1 to 3);
+    --     variable int: integer;
+    --     variable intv: integer_vector(1 to 4);
+    -- begin
+    --     -- Test of print
+    --     print("-- Start " & "My Library Test.");
+
+    --     FT.open_file("sample_in.txt");
+    --     while not FT.is_endfile loop
+    --         FT.read(int);
+    --         print(to_str(int));
+    --         FT.read_integer_vector(intv);
+    --         print(to_str(intv));
+    --     end loop;
+    --     FT.close_file;
+
+    --     print("csv_file");
+    --     FT.open_file("sample_in.csv");
+    --     while not FT.is_endfile loop
+    --         FT.read(int);
+    --         print(to_str(int));
+    --         FT.read_integer_vector(intv);
+    --         print(to_str(intv));
+    --     end loop;
+    --     FT.close_file;
         
 
-        print("Finish:" + now);
-        finish(0);
-        wait;
-    end process;
+    --     print("Finish:" + now);
+    --     finish(0);
+    --     wait;
+    -- end process;
 
 end architecture;
 

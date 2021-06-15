@@ -34,6 +34,7 @@ package str_lib is
     -- ```
     -- print value
     -- ```
+    procedure print(v: character; end_line: boolean:=True);
     procedure print(v: string; end_line: boolean:=True);
     procedure print(v: bit; end_line: boolean:=True);
     procedure print(v: boolean; end_line: boolean:=True);
@@ -66,6 +67,7 @@ package str_lib is
     -- ```
     -- to string
     -- ```
+    function to_str(v: character) return string;
     function to_str(v: bit) return string;
     function to_str(v: boolean) return string;
     function to_str(v: integer; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
@@ -85,6 +87,7 @@ package str_lib is
     -- ```
     -- string + *
     -- ```
+    function "+" (l: string; r: character) return string;
     function "+" (l: string; r: bit) return string;
     function "+" (l: string; r: boolean) return string;
     function "+" (l: string; r: integer) return string;
@@ -104,6 +107,7 @@ package str_lib is
     -- ```
     -- String / , Add Comma for CSV File
     -- ```
+    function "/" (l: string; r: character) return string;
     function "/" (l: string; r: bit) return string;
     function "/" (l: string; r: boolean) return string;
     function "/" (l: string; r: integer) return string;
@@ -152,6 +156,7 @@ package body str_lib is
     end protected body print_t;
 
     procedure print(v: string; end_line: boolean:=True) is begin SP.print_core(v, end_line); end procedure;
+    procedure print(v: character; end_line: boolean:=True) is begin SP.print_core(to_str(v), end_line); end procedure;
     procedure print(v: bit; end_line: boolean:=True) is begin SP.print_core(to_str(v), end_line); end procedure;
     procedure print(v: boolean; end_line: boolean:=True) is begin SP.print_core(to_str(v), end_line); end procedure;
     procedure print(v: integer; end_line: boolean:=True) is begin SP.print_core(to_str(v), end_line); end procedure;
@@ -186,6 +191,12 @@ package body str_lib is
             idx := idx+1;
         end loop;
         return ret;
+    end function;
+
+    -- character to string
+    function to_str(v: character) return string is
+    begin
+        return character'image(v);
     end function;
 
     -- bit to string
@@ -398,7 +409,7 @@ package body str_lib is
     -- ```
     -- String + 
     -- ```
-
+    function "+" (l: string; r: character) return string is begin return l & to_str(r); end function;
     function "+" (l: string; r: bit) return string is begin return l & to_str(r); end function;
     function "+" (l: string; r: boolean) return string is begin return l & to_str(r); end function;
     function "+" (l: string; r: integer) return string is begin return l & to_str(r); end function;
@@ -417,6 +428,7 @@ package body str_lib is
     -- ```
     -- String / , Add Comma for CSV File
     -- ```
+    function "/" (l: string; r: character) return string is begin return l & "," & to_str(r); end function;
     function "/" (l: string; r: bit) return string is begin return l & "," & to_str(r); end function;
     function "/" (l: string; r: boolean) return string is begin return l & "," & to_str(r); end function;
     function "/" (l: string; r: integer) return string is begin return l & "," & to_str(r); end function;
