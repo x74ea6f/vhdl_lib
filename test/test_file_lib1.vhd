@@ -19,37 +19,77 @@ architecture SIM of test_file_lib1 is
 begin
 
     process is
+        constant file_name1: string := "sample_in.txt";
+        constant is_csv1: boolean := False;
+        constant file_name2: string := "sample_in.csv";
+        constant is_csv2: boolean := True;
+
         file f_in: text;
         variable l: line;
         variable int: integer;
         variable intv: integer_vector(1 to 4);
+        variable rlv: real_vector(1 to 4);
+        variable slv: std_logic_vector(15 downto 0);
 
+        type a is array (natural range <>) of std_logic_vector(3 downto 0);
+
+        type c is array (natural range <>, natural range <>) of std_logic_vector(3 downto 0);
+        type d is array (natural range <>, natural range <>) of std_logic;
+
+        function get_array(n, m: natural) return d is
+            variable ret: d(0 to 4, 5 downto 0);
+        begin
+            return ret;
+        end function;
+
+        variable dd: d(0 to 2, 3 downto 0) := (
+            (X"4", X"5", X"6")
+            ); 
+        variable tmp: std_logic_vector(3 downto 0);
     begin
 
-        print(replace("ABcdefg", "AB", "012"));
-        SP.check_line("012cdefg");
-        print(replace("zzAABcdefg", "AB", "012"));
-        SP.check_line("zzA012cdefg");
-        print(replace("abcdefgAB", "AB", "012"));
-        SP.check_line("abcdefg012");
-        print(replace("abcdefgA", "AB", "012"));
-        SP.check_line("abcdefgA");
-        print(replace("ABcdefgAB", "AB", "012"));
-        SP.check_line("012cdefg012");
-        print(replace("AB", "AABB", "012"));
-        SP.check_line("AB");
+        for i in dd'range loop
+            for j in 0 to 3 loop
+                tmp(j) := dd(i,j);
+            end loop;
+            print(to_str(i) / tmp);
+        end loop;
 
 
-        file_open(f_in, "sample_in.csv", READ_MODE);
+
+        -- txt
+        file_open(f_in, file_name1, READ_MODE);
 
         while not endfile(f_in) loop
-            readline(f_in, l);
-            comma2space(l);
+            read_line(f_in, l, is_csv1);
+            read(l, int); -- in textio
+            print(int);
+            read(l, intv);
+            print(to_str(intv));
+            read(l, rlv);
+            print(to_str(rlv));
+            hread(l, slv); -- in std_logic_1164
+            print(to_str(slv));
+        end loop;
+
+        file_close(f_in);
+
+        -- csv
+        file_open(f_in, file_name2, READ_MODE);
+
+        while not endfile(f_in) loop
+            read_line(f_in, l, is_csv2);
             read(l, int);
             print(int);
             read(l, intv);
             print(to_str(intv));
+            read(l, rlv);
+            print(to_str(rlv));
+            hread(l, slv);
+            print(to_str(slv));
         end loop;
+
+        file_close(f_in);
 
         finish(0);
     end process;
