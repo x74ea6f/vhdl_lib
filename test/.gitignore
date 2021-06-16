@@ -11,3 +11,8 @@ work.*.wdb
 *.swp
 
 sample_out.txt
+
+## vsim
+_*
+transcript
+
