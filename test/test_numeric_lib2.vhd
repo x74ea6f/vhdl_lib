@@ -7,7 +7,8 @@ use ieee.math_real.all;
 use std.env.finish;
 
 use work.numeric_lib.all;
-use work.debug_lib.all;
+use work.str_lib.all;
+use work.sim_lib.all;
 
 
 entity test_numeric_lib2 is

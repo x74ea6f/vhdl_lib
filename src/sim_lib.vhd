@@ -24,7 +24,7 @@ package sim_lib is
     -- clock, reset
     -- ```
     procedure make_clock(signal clk: out std_logic; constant half_period: in time);
-    procedure make_reset(signal clk: in std_logic; constant cyc: in natural:=1; signal rstn: out std_logic);
+    procedure make_reset(signal rstn: out std_logic; signal clk: in std_logic; constant cyc: in natural:=1);
     procedure wait_clock(signal clk: std_logic; constant num: natural:=1);
 
     -- ```
@@ -62,7 +62,7 @@ package body sim_lib is
     end procedure;
 
     -- make reset
-    procedure make_reset(signal clk: in std_logic; constant cyc: in natural:=1; signal rstn: out std_logic) is
+    procedure make_reset(signal rstn: out std_logic; signal clk: in std_logic; constant cyc: in natural:=1) is
     begin
         rstn <= '0';
         wait_clock(clk, cyc);

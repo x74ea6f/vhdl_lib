@@ -19,14 +19,14 @@ architecture SIM of test_sim_lib2 is
 begin
 
     process begin
-        make_clock(5 ns, clk);
+        make_clock(clk, 5 ns);
     end process;
 
     process
     begin
         -- Test of print
         print("-- Start " & "My Library Test.");
-        make_reset(clk, 5, rstn);
+        make_reset(rstn, clk, 5);
 
         print("Wait 0Clock:" + now);
         wait_clock(clk, 0);

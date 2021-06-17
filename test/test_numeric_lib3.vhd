@@ -43,12 +43,14 @@ architecture SIM of test_numeric_lib3 is
         return u_v;
     end function;
 
-
-
+    --```
     --[TODO] Add to library.
+    --```
     type slv_vector is array (natural range <>, natural range <>) of std_logic;
     type unsigned_vector is array (natural range <>, natural range <>) of std_logic;
     type signed_vector is array (natural range <>, natural range <>) of std_logic;
+
+    type link_u_v is access unsigned_vector;
 
     procedure print(u_v: unsigned_vector) is
         variable v: unsigned(u_v'range(2));
@@ -96,6 +98,13 @@ architecture SIM of test_numeric_lib3 is
         return u_v2;
     end function;
 
+    procedure set_func_link(variable u_v: inout link_u_v; n: natural; v: unsigned) is
+    begin
+        for j in u_v'range(2) loop
+            u_v(n, j):= v(j);
+        end loop;
+    end procedure;
+
     --[TODO] not work in xsim.
     function get_u_vec(n,m: natural) return unsigned_vector is
         variable u_v: unsigned_vector(0 to n-1, m-1 downto 0):=(others=>(others=>'1'));
@@ -109,6 +118,20 @@ architecture SIM of test_numeric_lib3 is
     end function;
     
 
+    --```
+    --[TMP] not work in Vivado
+    --```
+    type unsigned_vec is array (natural range <>) of unsigned;
+
+    procedure print(u_v: unsigned_vec) is
+        variable v: unsigned(u_v'range);
+    begin
+        for i in u_v'range loop
+            print(to_str(u_v(i)) & ",", False);
+        end loop;
+        print("");
+    end procedure;
+
 begin
     process is
         variable u_v: unsigned_v(0 to 2):=(
@@ -119,6 +142,11 @@ begin
 
        variable u_v2: unsigned_vector(0 to 2, 3 downto 0);
        variable u_v3: unsigned_vector(0 to 2, 3 downto 0);
+       variable tmp: link_u_v;
+
+
+       variable u_vec: unsigned_vec(0 to 2)(3 downto 0);
+
     begin
         print(u_v);
         print(get_uv(3));
@@ -130,17 +158,34 @@ begin
         end loop;
         print(u_v2);
 
+        -- 
+        print("TEST1");
         -- u_v2 := set(u_v2, 1, to_unsigned(1, 4));
         set(u_v2, 1, to_unsigned(1, 4));
         print(u_v2);
         print(to_str(get(u_v2, 1)));
         print(u_v2);
 
-        print("TEST");
+        -- 
+        print("TEST2");
         u_v3 := set_func(u_v2, 1, to_unsigned(1, 4));
         print(u_v3);
 
         print(get_u_vec(5,4));
+
+        -- 
+        print("TEST3");
+        tmp := new unsigned_vector(0 to 10, 3 downto 0);
+        set_func_link(tmp, 1, to_unsigned(1, 4));
+        print(tmp(1,0));
+
+        -- 
+        print("TEST4");
+        for i in u_vec'range loop
+            u_vec(i) := u_v(i);
+        end loop;
+        print(u_vec);
+
 
         finish(0);
     end process;
