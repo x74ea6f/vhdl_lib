@@ -16,7 +16,7 @@ use work.str_lib.all;
 
 entity test_numeric_lib3 is
     generic(
-        LEN_ROUND: positive := 4
+        GEN: natural := 0
     );
 end entity;
 
@@ -118,19 +118,19 @@ architecture SIM of test_numeric_lib3 is
     end function;
     
 
-    --```
-    --[TMP] not work in Vivado
-    --```
-    type unsigned_vec is array (natural range <>) of unsigned;
+    -- --```
+    -- --[TMP] not work in Vivado
+    -- --```
+    -- type unsigned_vec is array (natural range <>) of unsigned;
 
-    procedure print(u_v: unsigned_vec) is
-        variable v: unsigned(u_v'range);
-    begin
-        for i in u_v'range loop
-            print(to_str(u_v(i)) & ",", False);
-        end loop;
-        print("");
-    end procedure;
+    -- procedure print(u_v: unsigned_vec) is
+    --     variable v: unsigned(u_v'range);
+    -- begin
+    --     for i in u_v'range loop
+    --         print(to_str(u_v(i)) & ",", False);
+    --     end loop;
+    --     print("");
+    -- end procedure;
 
 begin
     process is
@@ -145,7 +145,7 @@ begin
        variable tmp: link_u_v;
 
 
-       variable u_vec: unsigned_vec(0 to 2)(3 downto 0);
+    --    variable u_vec: unsigned_vec(0 to 2)(3 downto 0);
 
     begin
         print(u_v);
@@ -179,12 +179,12 @@ begin
         set_func_link(tmp, 1, to_unsigned(1, 4));
         print(tmp(1,0));
 
-        -- 
-        print("TEST4");
-        for i in u_vec'range loop
-            u_vec(i) := u_v(i);
-        end loop;
-        print(u_vec);
+        -- -- 
+        -- print("TEST4");
+        -- for i in u_vec'range loop
+        --     u_vec(i) := u_v(i);
+        -- end loop;
+        -- print(u_vec);
 
 
         finish(0);
