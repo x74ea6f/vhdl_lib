@@ -1,15 +1,16 @@
 # str_lib
-デバッグや、ログ出力用の、vhdl文字列ライブラリです。
+デバッグ出力やログ出力用の、VHDL文字列ライブラリです。
 ログ出力用のprint()や、各タイプから文字列への変換の関数があります。
+(integer'image()等, to_string()のラッパーライブラリ)
 
 含まれる関数をアルファベット順に挙げます。
 
 | function/procedure |
 | - |
-| [+](#plus) |
-| [/](#slash) |
+| [+(plus)](#plus) |
+| [/(slash)](#slash) |
 | [print()](#print)
-| [replace](#replace) |
+| [replace()](#replace) |
 | [to_str()](#to_str) |
 
 ### supported type
@@ -102,7 +103,8 @@ type PRINT_TYPE is (
 `function "+" (l: string; r: std_logic_vector) return string;`
 `function "+" (l: string; r: signed) return string;`
 `function "+" (l: string; r: unsigned) return string;`
-lと、rを文字列へ変換(to_str())し、結合したl+rを返します。string + stringはできませんので、標準の"&"を使用してください。
+Operator function.  
+lに、rを文字列へ変換(to_str())し、結合したl+rを返します。string + stringはできませんので、標準の"&"を使用してください。
 
 ## "/"(slash)
 `function "/" (l: string; r: character) return string;`
@@ -121,7 +123,8 @@ lと、rを文字列へ変換(to_str())し、結合したl+rを返します。st
 `function "/" (l: string; r: std_logic_vector) return string;`
 `function "/" (l: string; r: signed) return string;`
 `function "/" (l: string; r: unsigned) return string;`
-lと、rを文字列へ変換(to_str())し、カンマ区切りで結合したl,rを返します。csv形式。
+Operator function.  
+lに、rを文字列へ変換(to_str())し、カンマ区切りで結合したl,rを返します。csv形式。
 
 
 ## replace
