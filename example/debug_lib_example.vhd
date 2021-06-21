@@ -4,7 +4,8 @@ library std;
 library work;
 use ieee.std_logic_1164.all;
 use std.env.finish;
-use work.debug_lib.all;
+use work.str_lib.all;
+use work.sim_lib.all;
 
 entity debug_lib_example is
 end entity;
@@ -24,7 +25,7 @@ begin
         print("StdLogiVector=" + v_slv & ", ", false); -- false: not flush
         print("Integer=" & to_str(v_int, HEX)); -- flush
 
-        make_reset(clk, 5, rstn); -- reset
+        make_reset(rstn, clk, 5); -- reset
         wait_clock(clk, 5); -- wait clock rising, 5times
 
         print("Finish @" + now); -- show Simulation time
