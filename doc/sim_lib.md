@@ -3,11 +3,13 @@
 シミュレーション向けのVHDLライブラリです。
 含まれる関数をアルファベット順に挙げます。
 
-| Function/Procedure | |
-| - | - |
-| [check()](#check) | [rand_slv()](#rand_slv) |
-| [make_clock()](#make_clock) | [wait_clock()](#wait_clock) |
+| Function/Procedure |
+| - |
+| [check()](#check) |
+| [make_clock()](#make_clock) |
 | [make_reset()](#make_reset) |
+| [rand_slv()](#rand_slv) |
+| [wait_clock()](#wait_clock) |
 
 ## check()
 `procedure check(data, exp: std_logic_vector; msg:string:=""; show_result:boolean:=false);`
