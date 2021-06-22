@@ -20,6 +20,7 @@ read each doc for more details.
 [./src/str_lib.vhd](./src/str_lib.vhd)  
 
 #### test(example)
+- [str_lib_example.vhd](./example/str_lib_example.vhd)
 - [test_str_lib1.vhd](./test/test_str_lib1.vhd)
 - [test_str_lib2.vhd](./test/test_str_lib2.vhd)
 - [test_str_lib3.vhd](./test/test_str_lib3.vhd)
@@ -37,6 +38,7 @@ read each doc for more details.
 [./src/sim_lib.vhd](./src/sim_lib.vhd)  
 
 #### test(example)
+- [sim_lib_example.vhd](./example/sim_lib_example.vhd)
 - [test_sim_lib1.vhd](./test/test_sim_lib1.vhd)
 - [test_sim_lib2.vhd](./test/test_sim_lib2.vhd)
 - [test_sim_lib3.vhd](./test/test_sim_lib3.vhd)
