@@ -57,7 +57,7 @@ end process;
 ```log
 Hello world! 123
 StdLogiVector=0x1AB, Integer=0x0000007B
-Finish @0ns
+Finish @0fs
 ```
 
 ## replace

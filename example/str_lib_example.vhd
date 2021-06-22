@@ -29,5 +29,5 @@ end architecture;
 -- 
 -- Hello world! 123
 -- StdLogiVector=0x1AB, Integer=0x0000007B
--- Finish @100ns
+-- Finish @0fs
 -- 
