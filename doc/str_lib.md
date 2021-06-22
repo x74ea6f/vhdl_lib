@@ -99,6 +99,9 @@ type PRINT_TYPE is (
     DEC_S, -- signed
     DEC_U, -- unsigned
     BIN);
+constant LOGIC_DEFAULT_TYPE: PRINT_TYPE := HEX; -- for bit_vector, std_logic_vector
+constant SIGNED_DEFAULT_TYPE: PRINT_TYPE := DEC_S; -- for intger, real
+constant UNSIGNED_DEFAULT_TYPE: PRINT_TYPE := DEC_U; -- for intger, real
 ```
 
 ## "+"(plus)

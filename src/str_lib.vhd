@@ -175,6 +175,9 @@ package body str_lib is
     procedure print(v: signed; end_line: boolean:=True) is begin SP.print_core(to_str(v), end_line); end procedure;
     procedure print(v: unsigned; end_line: boolean:=True) is begin SP.print_core(to_str(v), end_line); end procedure;
 
+    -- ```
+    -- verilog hex prefix. unused.
+    -- ```
     function verilog_prefix(slv: std_logic_vector) return string is
     begin
         return integer'image(slv'length) & "'h"; -- verilog like
