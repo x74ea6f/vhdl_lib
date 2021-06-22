@@ -88,16 +88,16 @@ read each doc for more details.
 
 ## Test run
 ### by vivado(xsim)
-```
-$ cd test
-$ bash run.sh test_str_lib1.vhd
+```bash
+cd test
+bash run.sh test_str_lib1.vhd
 ```
 (modify run.sh for your environment.)
 
 ### by modelsim(vsim)
-```
-$ cd test
-$ bash run_modelsim.sh test_str_lib1.vhd
+```bash
+cd test
+bash run_modelsim.sh test_str_lib1.vhd
 ```
 (modify run_modelsim.sh for your environment.)
 
