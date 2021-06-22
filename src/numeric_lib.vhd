@@ -83,11 +83,15 @@ package numeric_lib is
     function f_or_reduce(a: in unsigned) return std_logic;
     -- or_reduce, signed
     function f_or_reduce(a: in signed) return std_logic;
+    -- or_reduce, std_logic_vector
+    function f_or_reduce(a: in std_logic_vector) return std_logic;
 
     -- and_reduce, unsigned
     function f_and_reduce(a: in unsigned) return std_logic;
     -- and_reduce, signed
     function f_and_reduce(a: in signed) return std_logic;
+    -- and_reduce, signed
+    function f_and_reduce(a: in std_logic_vector) return std_logic;
 
     --```
     -- Clip
@@ -422,6 +426,18 @@ package body numeric_lib is
 
     -- or_reduce
     function f_or_reduce(a: in unsigned) return std_logic is
+    begin
+        return f_or_reduce(std_logic_vector(a));
+    end function;
+
+    -- or_reduce
+    function f_or_reduce(a: in signed) return std_logic is
+    begin
+        return f_or_reduce(std_logic_vector(a));
+    end function;
+
+    -- or_reduce
+    function f_or_reduce(a: in std_logic_vector) return std_logic is
         variable ret : std_logic := '0';
     begin
         for i in a'range loop
@@ -430,26 +446,26 @@ package body numeric_lib is
         return ret;
     end function;
 
-    -- or_reduce
-    function f_or_reduce(a: in signed) return std_logic is
+    -- and_reduce
+    function f_and_reduce(a: in unsigned) return std_logic is
     begin
-        return f_or_reduce(unsigned(a));
+        return f_and_reduce(std_logic_vector(a));
     end function;
 
     -- and_reduce
-    function f_and_reduce(a: in unsigned) return std_logic is
+    function f_and_reduce(a: in signed) return std_logic is
+    begin
+        return f_and_reduce(std_logic_vector(a));
+    end function;
+
+    -- and_reduce
+    function f_and_reduce(a: in std_logic_vector) return std_logic is
         variable ret : std_logic := '1';
     begin
         for i in a'range loop
             ret := ret and a(i);
         end loop;
         return ret;
-    end function;
-
-    -- and_reduce
-    function f_and_reduce(a: in signed) return std_logic is
-    begin
-        return f_and_reduce(unsigned(a));
     end function;
 
     -- Clip M to N bit, unsigned.
