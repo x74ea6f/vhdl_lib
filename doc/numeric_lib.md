@@ -61,7 +61,7 @@ aとbの減算を行い、ビット拡張した値を返します。出力ビッ
 aとbの乗算を行い、ビット拡張した値を返します。出力ビット幅は、aとbのビット幅を足したビット幅です。
 
 
-## f_div
+## f_div()
 `function f_div(a: in unsigned; b: in unsigned) return unsigned;`  
 `function f_div_u(a,b: in std_logic_vector) return std_logic_vector;`  
 `function f_div(a: in unsigned; b: in signed) return signed;`  

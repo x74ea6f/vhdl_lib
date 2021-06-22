@@ -21,6 +21,12 @@ source: [./src/str_lib.vhd](./src/str_lib.vhd)
 doc: [./doc/sim_lib](./doc/sim_lib.md)  
 source: [./src/sim_lib.vhd](./src/sim_lib.vhd)  
 
+### numeric_lib
+- numeric(signed, unsigned) calc. add, sub, mul, div.
+- clip, round.
+doc: [./doc/numeric_lib](./doc/numeric_lib.md)  
+source: [./src/numeric_lib.vhd](./src/numeric_lib.vhd)  
+
 ## Usage
 1. Add Library file(s) to compile files.  
   (example: "src/str_lib.vhd")

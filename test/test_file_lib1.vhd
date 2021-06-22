@@ -70,38 +70,5 @@ begin
         finish(0);
     end process;
 
-    -- process
-    --     variable str: string(1 to 3);
-    --     variable int: integer;
-    --     variable intv: integer_vector(1 to 4);
-    -- begin
-    --     -- Test of print
-    --     print("-- Start " & "My Library Test.");
-
-    --     FT.open_file("sample_in.txt");
-    --     while not FT.is_endfile loop
-    --         FT.read(int);
-    --         print(to_str(int));
-    --         FT.read_integer_vector(intv);
-    --         print(to_str(intv));
-    --     end loop;
-    --     FT.close_file;
-
-    --     print("csv_file");
-    --     FT.open_file("sample_in.csv");
-    --     while not FT.is_endfile loop
-    --         FT.read(int);
-    --         print(to_str(int));
-    --         FT.read_integer_vector(intv);
-    --         print(to_str(intv));
-    --     end loop;
-    --     FT.close_file;
-        
-
-    --     print("Finish:" + now);
-    --     finish(0);
-    --     wait;
-    -- end process;
-
 end architecture;
 
