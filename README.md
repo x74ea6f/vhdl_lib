@@ -8,6 +8,7 @@ Simple and General useful VHDL library.
 ## Packages
 read each doc for more details.
 
+---
 ### str_lib
 - String library for log output & debug text output.  
 - Print to display, print()  
@@ -25,6 +26,7 @@ read each doc for more details.
 - [test_str_lib2.vhd](./test/test_str_lib2.vhd)
 - [test_str_lib3.vhd](./test/test_str_lib3.vhd)
 
+---
 ### sim_lib
 - Testbench Library.  
 - Create clock, reset. Wait clock  
@@ -43,6 +45,7 @@ read each doc for more details.
 - [test_sim_lib2.vhd](./test/test_sim_lib2.vhd)
 - [test_sim_lib3.vhd](./test/test_sim_lib3.vhd)
 
+---
 ### numeric_lib
 - numeric(signed, unsigned) calc. add, sub, mul, div.
 - clip, round.
@@ -58,6 +61,7 @@ read each doc for more details.
 - [test_numeric_lib2.vhd](./test/test_numeric_lib2.vhd)
 - [test_numeric_lib3.vhd](./test/test_numeric_lib3.vhd)
 
+---
 ### file_lib
 - textio wrapper for read csv file.
 
@@ -70,6 +74,7 @@ read each doc for more details.
 #### test(example)
 - [test_file_lib1.vhd](./test/test_file_lib1.vhd)
 
+---
 ## Usage
 1. Add Library file(s) to compile files.  
   (example: "src/str_lib.vhd")
