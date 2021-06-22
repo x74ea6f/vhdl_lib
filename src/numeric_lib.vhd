@@ -1,5 +1,3 @@
--- my calic lib
-
 --
 --
 --
@@ -85,6 +83,7 @@ package numeric_lib is
     function f_or_reduce(a: in unsigned) return std_logic;
     -- or_reduce, signed
     function f_or_reduce(a: in signed) return std_logic;
+
     -- and_reduce, unsigned
     function f_and_reduce(a: in unsigned) return std_logic;
     -- and_reduce, signed
@@ -101,22 +100,24 @@ package numeric_lib is
     --```
     -- Round
     --```
-    --[TODO]
     -- truncate, uM.N to uM
     function f_truncate(a: unsigned; constant len: natural) return unsigned;
-    -- round half up, uM.N to uM
-    function f_round_half_up(a: unsigned; constant len: natural) return unsigned;
-    -- round to even, uM.N to uM
-    function f_round_to_even(a: unsigned; constant len: natural) return unsigned;
-
     -- truncate, sM.N to sM
     function f_truncate(a: signed; constant len: natural) return signed;
-    -- round toward zero(RZ), sM.N to sM
+ 
+   -- round toward zero(RZ), sM.N to sM
     function f_round_toward_zero(a: signed; constant len: natural) return signed;
+
+    -- round half up, uM.N to uM
+    function f_round_half_up(a: unsigned; constant len: natural) return unsigned;
     -- round half up, sM.N to sM
     function f_round_half_up(a: signed; constant len: natural) return signed;
+
+    -- round to even, uM.N to uM
+    function f_round_to_even(a: unsigned; constant len: natural) return unsigned;
     -- round to even, sM.N to sM
     function f_round_to_even(a: signed; constant len: natural) return signed;
+
 end package;
 
 package body numeric_lib is
@@ -514,48 +515,11 @@ package body numeric_lib is
     --     return sign & bb;
     -- end function;
 
-    --[TODO]
     -- truncate, uM.N to uM
     function f_truncate(a: unsigned; constant len: natural) return unsigned is
         alias aa: unsigned(a'length-1 downto 0) is a; -- uM.N
     begin
         return aa(aa'length-1 downto aa'length - len); -- uM
-    end function;
-
-    -- round half up, uM.N to uM
-    -- 0: trunc, 1: up
-    function f_round_half_up(a: unsigned; constant len: natural) return unsigned is
-        alias aa: unsigned(a'length-1 downto 0) is a; -- uM.N
-        variable aa_up: unsigned(len-1 downto 0); -- uM
-        variable add: std_logic; -- u.1
-        variable sum: unsigned(len-1 downto 0); -- uM
-        constant m_max: unsigned(len-1 downto 0) := (others=>'1'); -- uM
-    begin
-        aa_up := aa(a'length-1 downto a'length-len); -- uM
-        add := aa(a'length-len-1); -- N'MSB
-        add := '0' when aa_up=m_max else add; -- for Clip
-        sum := aa_up + add; -- uM, NoOverflow
-        return sum; -- uM
-    end function;
-
-    -- round to even, uM.N to uM
-    -- if (not 1.1000) +0.1, else +0.0
-    function f_round_to_even(a: unsigned; constant len: natural) return unsigned is
-        alias aa: unsigned(a'length-1 downto 0) is a; -- uM.N
-        variable aa_up: unsigned(len-1 downto 0); -- uM
-        variable aa_down: unsigned(a'length-len-1 downto 0); -- .N(actually unsigned)
-        variable add: std_logic; -- u.1
-        variable sum: unsigned(len-1 downto 0); -- uM
-        constant m_max: unsigned(len-1 downto 0) := (others=>'1'); -- uM
-        constant n_half: unsigned(a'length-len-1 downto 0) := (a'length-len-1=>'1', others=>'0'); -- .N(actually unsigned)
-    begin
-        aa_up := aa(a'length-1 downto a'length-len); -- uM
-        aa_down := aa(a'length-len-1 downto 0); -- .N
-        add := aa_down(aa_down'length-1); -- N'MSB, .0 or .1
-        add := '0' when (aa_up(0)='0' and aa_down=n_half) else add; -- for to even
-        add := '0' when aa_up=m_max else add; -- for Clip
-        sum := aa_up + add; -- uM, NoOverflow
-        return sum; -- uM
     end function;
 
     -- truncate, sM.N to sM
@@ -580,6 +544,22 @@ package body numeric_lib is
         return sum(aa'length-1 downto aa'length-len); -- sM
     end function;
 
+    -- round half up, uM.N to uM
+    -- 0: trunc, 1: up
+    function f_round_half_up(a: unsigned; constant len: natural) return unsigned is
+        alias aa: unsigned(a'length-1 downto 0) is a; -- uM.N
+        variable aa_up: unsigned(len-1 downto 0); -- uM
+        variable add: std_logic; -- u.1
+        variable sum: unsigned(len-1 downto 0); -- uM
+        constant m_max: unsigned(len-1 downto 0) := (others=>'1'); -- uM
+    begin
+        aa_up := aa(a'length-1 downto a'length-len); -- uM
+        add := aa(a'length-len-1); -- N'MSB
+        add := '0' when aa_up=m_max else add; -- for Clip
+        sum := aa_up + add; -- uM, NoOverflow
+        return sum; -- uM
+    end function;
+
     -- round half up, sM.N to sM
     -- 0: trunc, 1: up
     function f_round_half_up(a: signed; constant len: natural) return signed is
@@ -594,6 +574,26 @@ package body numeric_lib is
         add := "00" when aa_up=m_max else add; -- for Clip
         sum := aa_up + resize(add, sum'length); -- sM, NoOverflow
         return sum; -- sM
+    end function;
+
+    -- round to even, uM.N to uM
+    -- if (not 1.1000) +0.1, else +0.0
+    function f_round_to_even(a: unsigned; constant len: natural) return unsigned is
+        alias aa: unsigned(a'length-1 downto 0) is a; -- uM.N
+        variable aa_up: unsigned(len-1 downto 0); -- uM
+        variable aa_down: unsigned(a'length-len-1 downto 0); -- .N(actually unsigned)
+        variable add: std_logic; -- u.1
+        variable sum: unsigned(len-1 downto 0); -- uM
+        constant m_max: unsigned(len-1 downto 0) := (others=>'1'); -- uM
+        constant n_half: unsigned(a'length-len-1 downto 0) := (a'length-len-1=>'1', others=>'0'); -- .N(actually unsigned)
+    begin
+        aa_up := aa(a'length-1 downto a'length-len); -- uM
+        aa_down := aa(a'length-len-1 downto 0); -- .N
+        add := aa_down(aa_down'length-1); -- N'MSB, .0 or .1
+        add := '0' when (aa_up(0)='0' and aa_down=n_half) else add; -- for to even
+        add := '0' when aa_up=m_max else add; -- for Clip
+        sum := aa_up + add; -- uM, NoOverflow
+        return sum; -- uM
     end function;
 
     -- round to even, sM.N to sM
