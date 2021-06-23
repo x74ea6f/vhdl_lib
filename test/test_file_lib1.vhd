@@ -23,8 +23,10 @@ begin
         constant is_csv1: boolean := False;
         constant file_name2: string := "sample_in.csv";
         constant is_csv2: boolean := True;
+        constant file_name3: string := "sample_out.csv";
 
         file f_in: text;
+        file f_out: text;
         variable l: line;
         variable int: integer;
         variable intv: integer_vector(1 to 4);
@@ -66,6 +68,18 @@ begin
         end loop;
 
         file_close(f_in);
+
+        -- csv
+        file_open(f_out, file_name3, WRITE_MODE);
+        for i in 0 to 3 loop
+            -- write(l, to_str(int) / intv / rlv / slv);
+            write(l, to_str(int) / to_str(intv, append_parenthesis=>False) / to_str(rlv, append_parenthesis=>False) / slv);
+            int := int + 1;
+            writeline(f_out, l);
+        end loop;
+
+        file_close(f_out);
+
 
         finish(0);
     end process;

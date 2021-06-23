@@ -11,6 +11,7 @@ work.*.wdb
 *.swp
 
 sample_out.txt
+sample_out.csv
 
 ## vsim
 _*
