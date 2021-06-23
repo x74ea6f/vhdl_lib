@@ -27,6 +27,20 @@
 | |  signed
 | | unsigned |
 
+## STR_LIB_CONFIG
+str_lib共通の設定を変更します。
+
+### STR_LIB_CONFIG.set_append_preanthesis()
+`procedure set_append_parenthesis(b: boolean);`  
+append_parenthsisを設定します。
+一部ベクター出力時に"()"を付与し出力するかの制御を行います。to_str()のオプション引数、append_parenthesisがついている関数に対し影響します。  
+`STR_LIB_CONFIG.set_append_parenthesis(True);`の場合、以降function呼び出し時のappend_parenthesisを無視し、"()"を付与しません。
+`STR_LIB_CONFIG.set_append_parenthesis(False);`の場合、以降function呼び出し時のappend_parenthesisで"()"の付与を制御します。
+
+### STR_LIB_CONFIG.get_append_preanthesis
+`impure function get_append_parenthesis return boolean;`  
+現在のappend_parenthsisを読み出します。
+
 ## print()
 `procedure print(v: character; end_line: boolean:=true);`  
 `procedure print(v: string; end_line: boolean:=true);`  
@@ -73,23 +87,23 @@ print(replace("ABcdefg", "AB", "012"));
 ```
 
 ## to_str()
-`function to_str(v: character) return string;`  
-`function to_str(v: bit) return string;`  
-`function to_str(v: boolean) return string;`  
-`function to_str(v: integer; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;`  
-`function to_str(v: real) return string;`  
-`function to_str(v: time) return string;`  
-`function to_str(v: std_logic) return string;`  
-`function to_str(btv: bit_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;`  
-`function to_str(blv: boolean_vector; append_parenthesis: boolean:=True) return string;`  
-`function to_str(intv: integer_vector; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x"; append_parenthesis: boolean:=True) return string;`  
-`function to_str(rlv: real_vector; append_parenthesis: boolean:=True) return string;`  
-`function to_str(tmv: time_vector; append_parenthesis: boolean:=True) return string;`  
-`function to_str(slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;`  
-`function to_str(s: signed; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;`  
-`function to_str(u: unsigned; ptype: PRINT_TYPE:=UNSIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;`  
+`impure function to_str(v: character) return string;`  
+`impure function to_str(v: bit) return string;`  
+`impure function to_str(v: boolean) return string;`  
+`impure function to_str(v: integer; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;`  
+`impure function to_str(v: real) return string;`  
+`impure function to_str(v: time) return string;`  
+`impure function to_str(v: std_logic) return string;`  
+`impure function to_str(btv: bit_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;`  
+`impure function to_str(blv: boolean_vector; append_parenthesis: boolean:=True) return string;`  
+`impure function to_str(intv: integer_vector; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x"; append_parenthesis: boolean:=True) return string;`  
+`impure function to_str(rlv: real_vector; append_parenthesis: boolean:=True) return string;`  
+`impure function to_str(tmv: time_vector; append_parenthesis: boolean:=True) return string;`  
+`impure function to_str(slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;`  
+`impure function to_str(s: signed; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;`  
+`impure function to_str(u: unsigned; ptype: PRINT_TYPE:=UNSIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;`  
 
-[サポートするタイプ](#supported-type)を文字列stringに変換します。 [PRINT_TYPE](#print_type)を付けた場合、指定フォーマットの文字列へ変換します。[PRINT_TYPE](#print_type)指定なしの場合は、上記の各関数宣言を参照。またprefix(Default:"0x")を付けた場合、PRINT_TYPE=HEXの場合にprefix+HEXへと変換します。
+[サポートするタイプ](#supported-type)を文字列stringに変換します。 [PRINT_TYPE](#print_type)を付けた場合、指定フォーマットの文字列へ変換します。[PRINT_TYPE](#print_type)指定なしの場合は、上記の各関数宣言を参照。またprefix(Default:"0x")を付けた場合、PRINT_TYPE=HEXの場合にprefix+HEXへと変換します。いくつかのVectorタイプでは、append_parenthesis=Trueの場合、"()"をつけてベクターをまとめます。(例: True時:`(1,2,3)`, False時:`1,2,3`)
 
 ### PRINT_TYPE
 数値タイプ等で、2進数(BIN)、10進数（符号有:DEC_S, 無:DEC_U)、16進数(HEX)での出力を指定します。
@@ -105,21 +119,21 @@ constant UNSIGNED_DEFAULT_TYPE: PRINT_TYPE := DEC_U; -- for intger, real
 ```
 
 ## "+"(plus)
-`function "+" (l: string; r: character) return string;`  
-`function "+" (l: string; r: bit) return string;`  
-`function "+" (l: string; r: boolean) return string;`  
-`function "+" (l: string; r: integer) return string;`  
-`function "+" (l: string; r: real) return string;`  
-`function "+" (l: string; r: time) return string;`  
-`function "+" (l: string; r: std_logic) return string;`  
-`function "+" (l: string; r: bit_vector) return string;`  
-`function "+" (l: string; r: boolean_vector) return string;`  
-`function "+" (l: string; r: integer_vector) return string;`  
-`function "+" (l: string; r: real_vector) return string;`  
-`function "+" (l: string; r: time_vector) return string;`  
-`function "+" (l: string; r: std_logic_vector) return string;`  
-`function "+" (l: string; r: signed) return string;`  
-`function "+" (l: string; r: unsigned) return string;`  
+`impure function "+" (l: string; r: character) return string;`  
+`impure function "+" (l: string; r: bit) return string;`  
+`impure function "+" (l: string; r: boolean) return string;`  
+`impure function "+" (l: string; r: integer) return string;`  
+`impure function "+" (l: string; r: real) return string;`  
+`impure function "+" (l: string; r: time) return string;`  
+`impure function "+" (l: string; r: std_logic) return string;`  
+`impure function "+" (l: string; r: bit_vector) return string;`  
+`impure function "+" (l: string; r: boolean_vector) return string;`  
+`impure function "+" (l: string; r: integer_vector) return string;`  
+`impure function "+" (l: string; r: real_vector) return string;`  
+`impure function "+" (l: string; r: time_vector) return string;`  
+`impure function "+" (l: string; r: std_logic_vector) return string;`  
+`impure function "+" (l: string; r: signed) return string;`  
+`impure function "+" (l: string; r: unsigned) return string;`  
 Operator function.  
 rを文字列へ変換(to_str())し、lと結合したl+rを返します。string + stringはできませんので、標準の"&"を使用してください。
 
@@ -139,21 +153,22 @@ variable v_slv: std_logic_vector(7 down to 0):= x"12";
 | "a=" + 12 & ", b=" + 34 | "a=12, b=34" | complex |
 
 ## "/"(slash)
-`function "/" (l: string; r: character) return string;`  
-`function "/" (l: string; r: bit) return string;`  
-`function "/" (l: string; r: boolean) return string;`  
-`function "/" (l: string; r: integer) return string;`  
-`function "/" (l: string; r: real) return string;`  
-`function "/" (l: string; r: time) return string;`  
-`function "/" (l: string; r: std_logic) return string;`  
-`function "/" (l: string; r: bit_vector) return string;`  
-`function "/" (l: string; r: boolean_vector) return string;`  
-`function "/" (l: string; r: integer_vector) return string;`  
-`function "/" (l: string; r: real_vector) return string;`  
-`function "/" (l: string; r: time_vector) return string;`  
-`function "/" (l: string; r: std_logic_vector) return string;`  
-`function "/" (l: string; r: signed) return string;`  
-`function "/" (l: string; r: unsigned) return string;`  
+`impure function "/" (l: string; r: character) return string;`  
+`impure function "/" (l: string; r: string) return string;`  
+`impure function "/" (l: string; r: bit) return string;`  
+`impure function "/" (l: string; r: boolean) return string;`  
+`impure function "/" (l: string; r: integer) return string;`  
+`impure function "/" (l: string; r: real) return string;`  
+`impure function "/" (l: string; r: time) return string;`  
+`impure function "/" (l: string; r: std_logic) return string;`  
+`impure function "/" (l: string; r: bit_vector) return string;`  
+`impure function "/" (l: string; r: boolean_vector) return string;`  
+`impure function "/" (l: string; r: integer_vector) return string;`  
+`impure function "/" (l: string; r: real_vector) return string;`  
+`impure function "/" (l: string; r: time_vector) return string;`  
+`impure function "/" (l: string; r: std_logic_vector) return string;`  
+`impure function "/" (l: string; r: signed) return string;`  
+`impure function "/" (l: string; r: unsigned) return string;`  
 Operator function.  
 rを文字列へ変換(to_str())し、lとカンマ区切りで結合したl,rを返します。csv形式。
 
@@ -162,8 +177,5 @@ rを文字列へ変換(to_str())し、lとカンマ区切りで結合したl,r�
 | code | return string | description | 
 | - | - | - |
 | to_str(X"123") / 123 / 1.23 | "0x123,123,1.230000e+00" | use "/" for csv |
-
-
-
 
 
