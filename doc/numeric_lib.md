@@ -20,9 +20,10 @@ std_logic_vector用は、signedであれば関数名の末尾に"_s", unsigned�
 | [f_and_reduce()](#f_and_reduce) | bit and |
 | [f_clip()](#f_clip) | clip |
 | [f_truncate()](#f_truncate) | round |
-| [f_round_to_ward_zero()](#f_sub) | round |
+| [f_round_to_ward_zero()](#f_round_to_ward_zero) | round |
 | [f_round_half_up()](#f_round_half_up) | round |
 | [f_round_to_even()](#f_round_to_even) | round |
+| [f_round()](#f_round) | round |
 
 ## f_add()
 `function f_add(a,b: in unsigned) return unsigned;`  
@@ -89,7 +90,9 @@ aとbの除算を行い、ビット拡張した値を返します。出力ビッ
 
 ## f_clip()
 `function f_clip(a: in unsigned; constant n: in natural) return unsigned;`  
+`function f_clip_u(a: in std_logic_vector; constant n: in natural) return std_logic_vector;`  
 `function f_clip(a: in signed; constant n: in natural) return signed;`  
+`function f_clip_s(a: in std_logic_vector; constant n: in natural) return std_logic_vector;`  
 
 nビットでクリップしたaを返します。出力ビット幅は、nビットとなります。
 
@@ -117,4 +120,8 @@ aの丸めを行い、lenで指定したビット幅を出力します。丸め�
 aの丸めを行い、lenで指定したビット幅を出力します。丸め方法は、偶数への丸めです。
 
 
+## f_round()
+`alias f_round is f_round_half_up[unsigned, natural return unsigned];`  
+`alias f_round is f_round_half_up[signed, natural return signed];`  
+f_round_half_up()へのaliasです。
 

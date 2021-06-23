@@ -98,8 +98,10 @@ package numeric_lib is
     --```
     -- clip M to N bit, unsigned.
     function f_clip(a: in unsigned; constant n: in natural) return unsigned;
+    function f_clip_u(a: in std_logic_vector; constant n: in natural) return std_logic_vector;
     -- clip M to N bit, signed.
     function f_clip(a: in signed; constant n: in natural) return signed;
+    function f_clip_s(a: in std_logic_vector; constant n: in natural) return std_logic_vector;
 
     --```
     -- Round
@@ -121,6 +123,9 @@ package numeric_lib is
     function f_round_to_even(a: unsigned; constant len: natural) return unsigned;
     -- round to even, sM.N to sM
     function f_round_to_even(a: signed; constant len: natural) return signed;
+
+    alias f_round is f_round_half_up[unsigned, natural return unsigned];
+    alias f_round is f_round_half_up[signed, natural return signed];
 
 end package;
 
@@ -482,6 +487,11 @@ package body numeric_lib is
         return bb;
     end function;
 
+    function f_clip_u(a: in std_logic_vector; constant n: in natural) return std_logic_vector is
+    begin
+        return std_logic_vector(f_clip(unsigned(a), n));
+    end function;
+
     -- Clip M to N bit, signed.
     function f_clip(a: in signed; constant n: in natural) return signed is
         alias aa : signed(a'length-1 downto 0) is a;
@@ -495,6 +505,11 @@ package body numeric_lib is
             ret := aa(n-1 downto 0);
         end if;
         return ret;
+    end function;
+
+    function f_clip_s(a: in std_logic_vector; constant n: in natural) return std_logic_vector is
+    begin
+        return std_logic_vector(f_clip(signed(a), n));
     end function;
 
     -- function f_clip(a: in unsigned; constant n: in natural) return unsigned is
