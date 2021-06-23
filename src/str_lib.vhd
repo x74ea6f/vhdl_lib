@@ -31,6 +31,13 @@ package str_lib is
 
     shared variable SP: print_t;
 
+    type str_lib_config_t is protected
+        impure function get_append_parenthesis return boolean;
+        procedure set_append_parenthesis(b: boolean);
+    end protected;
+
+    shared variable STR_LIB_CONFIG: str_lib_config_t;
+
     -- ```
     -- print value
     -- ```
@@ -67,63 +74,64 @@ package str_lib is
     -- ```
     -- to string
     -- ```
-    function to_str(v: character) return string;
-    function to_str(v: bit) return string;
-    function to_str(v: boolean) return string;
-    function to_str(v: integer; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
-    function to_str(v: real) return string;
-    function to_str(v: time) return string;
-    function to_str(v: std_logic) return string;
+    impure function to_str(v: character) return string;
+    impure function to_str(v: bit) return string;
+    impure function to_str(v: boolean) return string;
+    impure function to_str(v: integer; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
+    impure function to_str(v: real) return string;
+    impure function to_str(v: time) return string;
+    impure function to_str(v: std_logic) return string;
 
-    function to_str(btv: bit_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;
-    function to_str(blv: boolean_vector; append_parenthesis: boolean:=True) return string;
-    function to_str(intv: integer_vector; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE;
+    impure function to_str(btv: bit_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;
+    impure function to_str(blv: boolean_vector; append_parenthesis: boolean:=True) return string;
+    impure function to_str(intv: integer_vector; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE;
         prefix: string:="0x"; append_parenthesis: boolean:=True) return string;
-    function to_str(rlv: real_vector; append_parenthesis: boolean:=True) return string;
-    function to_str(tmv: time_vector; append_parenthesis: boolean:=True) return string;
-    function to_str(slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;
-    function to_str(s: signed; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
-    function to_str(u: unsigned; ptype: PRINT_TYPE:=UNSIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
+    impure function to_str(rlv: real_vector; append_parenthesis: boolean:=True) return string;
+    impure function to_str(tmv: time_vector; append_parenthesis: boolean:=True) return string;
+    impure function to_str(slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string;
+    impure function to_str(s: signed; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
+    impure function to_str(u: unsigned; ptype: PRINT_TYPE:=UNSIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;
 
     -- ```
     -- string + *
     -- ```
-    function "+" (l: string; r: character) return string;
-    function "+" (l: string; r: bit) return string;
-    function "+" (l: string; r: boolean) return string;
-    function "+" (l: string; r: integer) return string;
-    function "+" (l: string; r: real) return string;
-    function "+" (l: string; r: time) return string;
-    function "+" (l: string; r: std_logic) return string;
+    impure function "+" (l: string; r: character) return string;
+    impure function "+" (l: string; r: bit) return string;
+    impure function "+" (l: string; r: boolean) return string;
+    impure function "+" (l: string; r: integer) return string;
+    impure function "+" (l: string; r: real) return string;
+    impure function "+" (l: string; r: time) return string;
+    impure function "+" (l: string; r: std_logic) return string;
 
-    function "+" (l: string; r: bit_vector) return string;
-    function "+" (l: string; r: boolean_vector) return string;
-    function "+" (l: string; r: integer_vector) return string;
-    function "+" (l: string; r: real_vector) return string;
-    function "+" (l: string; r: time_vector) return string;
-    function "+" (l: string; r: std_logic_vector) return string;
-    function "+" (l: string; r: signed) return string;
-    function "+" (l: string; r: unsigned) return string;
+    impure function "+" (l: string; r: bit_vector) return string;
+    impure function "+" (l: string; r: boolean_vector) return string;
+    impure function "+" (l: string; r: integer_vector) return string;
+    impure function "+" (l: string; r: real_vector) return string;
+    impure function "+" (l: string; r: time_vector) return string;
+    impure function "+" (l: string; r: std_logic_vector) return string;
+    impure function "+" (l: string; r: signed) return string;
+    impure function "+" (l: string; r: unsigned) return string;
 
     -- ```
     -- String / , Add Comma for CSV File
     -- ```
-    function "/" (l: string; r: character) return string;
-    function "/" (l: string; r: bit) return string;
-    function "/" (l: string; r: boolean) return string;
-    function "/" (l: string; r: integer) return string;
-    function "/" (l: string; r: real) return string;
-    function "/" (l: string; r: time) return string;
-    function "/" (l: string; r: std_logic) return string;
+    impure function "/" (l: string; r: character) return string;
+    impure function "/" (l: string; r: string) return string;
+    impure function "/" (l: string; r: bit) return string;
+    impure function "/" (l: string; r: boolean) return string;
+    impure function "/" (l: string; r: integer) return string;
+    impure function "/" (l: string; r: real) return string;
+    impure function "/" (l: string; r: time) return string;
+    impure function "/" (l: string; r: std_logic) return string;
 
-    function "/" (l: string; r: bit_vector) return string;
-    function "/" (l: string; r: boolean_vector) return string;
-    function "/" (l: string; r: integer_vector) return string;
-    function "/" (l: string; r: real_vector) return string;
-    function "/" (l: string; r: time_vector) return string;
-    function "/" (l: string; r: std_logic_vector) return string;
-    function "/" (l: string; r: signed) return string;
-    function "/" (l: string; r: unsigned) return string;
+    impure function "/" (l: string; r: bit_vector) return string;
+    impure function "/" (l: string; r: boolean_vector) return string;
+    impure function "/" (l: string; r: integer_vector) return string;
+    impure function "/" (l: string; r: real_vector) return string;
+    impure function "/" (l: string; r: time_vector) return string;
+    impure function "/" (l: string; r: std_logic_vector) return string;
+    impure function "/" (l: string; r: signed) return string;
+    impure function "/" (l: string; r: unsigned) return string;
 
     impure function replace(str, search, rep:string) return string;
 
@@ -158,6 +166,20 @@ package body str_lib is
 
     end protected body print_t;
 
+    type str_lib_config_t is protected body
+        variable append_parenthesis: boolean := True;
+
+        impure function get_append_parenthesis return boolean is
+        begin
+            return append_parenthesis;
+        end function;
+
+        procedure set_append_parenthesis(b: boolean) is
+        begin
+            append_parenthesis := b;
+        end procedure;
+    end protected body str_lib_config_t;
+
     procedure print(v: string; end_line: boolean:=True) is begin SP.print_core(v, end_line); end procedure;
     procedure print(v: character; end_line: boolean:=True) is begin SP.print_core(to_str(v), end_line); end procedure;
     procedure print(v: bit; end_line: boolean:=True) is begin SP.print_core(to_str(v), end_line); end procedure;
@@ -187,7 +209,7 @@ package body str_lib is
     -- to String
     -- ```
     -- std_logic_vector to string, Binary -- Use Internal Only
-    function to_bstr(slv: std_logic_vector) return string is
+    impure function to_bstr(slv: std_logic_vector) return string is
         alias v: std_logic_vector(slv'length-1 downto 0) is slv;
         variable ret: string(1 to v'length);
         variable idx: natural := 1;
@@ -200,25 +222,25 @@ package body str_lib is
     end function;
 
     -- character to string
-    function to_str(v: character) return string is
+    impure function to_str(v: character) return string is
     begin
         return character'image(v);
     end function;
 
     -- bit to string
-    function to_str(v: bit) return string is
+    impure function to_str(v: bit) return string is
     begin
         return bit'image(v);
     end function;
 
     -- boolean to string
-    function to_str(v: boolean) return string is
+    impure function to_str(v: boolean) return string is
     begin
         return boolean'image(v);
     end function;
 
     -- integer to string
-    function to_str(v: integer; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string is
+    impure function to_str(v: integer; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string is
         variable v_u: unsigned(31 downto 0);
     begin
         -- v: Only for integer'low/2 to integer'high/2
@@ -232,13 +254,13 @@ package body str_lib is
     end function;
 
     -- real to string
-    function to_str(v: real) return string is
+    impure function to_str(v: real) return string is
     begin
         return real'image(v);
     end function;
 
     -- time to string
-    function to_str(v: time) return string is
+    impure function to_str(v: time) return string is
         constant RESO: time := 1 ps; -- Tim Resolution
         variable tm: time;
         variable ret: string(1 to 14); -- s10+3
@@ -278,13 +300,13 @@ package body str_lib is
     -- end function;
 
     -- std_logic to string
-    function to_str(v: std_logic) return string is
+    impure function to_str(v: std_logic) return string is
     begin
         return std_logic'image(v);
     end function;
 
     -- bit_vector to string
-    function to_str(btv: bit_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string is
+    impure function to_str(btv: bit_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string is
     begin
         return to_str(to_std_logic_vector(btv), ptype, prefix);
     end function;
@@ -294,9 +316,10 @@ package body str_lib is
     -- 呼び出し1回にしたい。
 
     -- Parenthesis
-    function parenthesis(str: string; append: boolean:=True) return string is
+    impure function parenthesis(str: string; append: boolean:=True) return string is
     begin
-        if append=True then
+        if append=True and STR_LIB_CONFIG.get_append_parenthesis=True then
+        -- if append=True then
             return "(" & str & ")";
         else
             return str;
@@ -304,7 +327,7 @@ package body str_lib is
     end function;
 
     -- boolean_vector to string
-    function to_str(blv: boolean_vector; append_parenthesis: boolean:=True) return string is
+    impure function to_str(blv: boolean_vector; append_parenthesis: boolean:=True) return string is
         alias v: boolean_vector(blv'length-1 downto 0) is blv;
         variable ret: string(1 to v'length*(5+1)); -- "false"+','
         variable idx: natural := 1;
@@ -324,7 +347,7 @@ package body str_lib is
     end function;
 
     -- integer_vector to string
-    function to_str(intv: integer_vector;
+    impure function to_str(intv: integer_vector;
         ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE;
         prefix: string:="0x";
         append_parenthesis: boolean:=True
@@ -349,7 +372,7 @@ package body str_lib is
     end function;
 
     -- real_vector to string
-    function to_str(rlv: real_vector; append_parenthesis: boolean:=True) return string is
+    impure function to_str(rlv: real_vector; append_parenthesis: boolean:=True) return string is
         alias v: real_vector(rlv'length-1 downto 0) is rlv;
         -- type real is range -1.7014111e+308 to 1.7014111e+308;
         variable ret: string(1 to v'length*(15+1)); -- s1.7es3 + ","
@@ -370,7 +393,7 @@ package body str_lib is
     end function;
 
     -- time_vector to string
-    function to_str(tmv: time_vector; append_parenthesis: boolean:=True) return string is
+    impure function to_str(tmv: time_vector; append_parenthesis: boolean:=True) return string is
         alias v: time_vector(tmv'length-1 downto 0) is tmv;
         variable ret: string(1 to tmv'length*(14+1)); -- s10+3 + ","
         variable idx: natural := 1;
@@ -390,7 +413,7 @@ package body str_lib is
     end function;
 
     -- std_logic_vector to string
-    function to_str( slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string is
+    impure function to_str( slv: std_logic_vector; ptype: PRINT_TYPE:=LOGIC_DEFAULT_TYPE; prefix: string:="0x") return string is
         alias v: std_logic_vector(slv'length-1 downto 0) is slv;
     begin
         -- dont support to_hstring(bit_vector) in Vivado 2020.2.
@@ -403,7 +426,7 @@ package body str_lib is
     end function;
 
     -- signed to string
-    function to_str(s: signed; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string is
+    impure function to_str(s: signed; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string is
         alias v: signed(s'length-1 downto 0) is s;
     begin
         case ptype is
@@ -415,7 +438,7 @@ package body str_lib is
     end function;
 
     -- unsigned to string
-    function to_str(u: unsigned; ptype: PRINT_TYPE:=UNSIGNED_DEFAULT_TYPE; prefix: string:="0x") return string is
+    impure function to_str(u: unsigned; ptype: PRINT_TYPE:=UNSIGNED_DEFAULT_TYPE; prefix: string:="0x") return string is
         alias v: unsigned(u'length-1 downto 0) is u;
     begin
         case ptype is
@@ -429,40 +452,41 @@ package body str_lib is
     -- ```
     -- String + 
     -- ```
-    function "+" (l: string; r: character) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: bit) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: boolean) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: integer) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: real) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: time) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: std_logic) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: bit_vector) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: boolean_vector) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: integer_vector) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: real_vector) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: time_vector) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: std_logic_vector) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: unsigned) return string is begin return l & to_str(r); end function;
-    function "+" (l: string; r: signed) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: character) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: bit) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: boolean) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: integer) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: real) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: time) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: std_logic) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: bit_vector) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: boolean_vector) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: integer_vector) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: real_vector) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: time_vector) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: std_logic_vector) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: unsigned) return string is begin return l & to_str(r); end function;
+    impure function "+" (l: string; r: signed) return string is begin return l & to_str(r); end function;
 
     -- ```
     -- String / , Add Comma for CSV File
     -- ```
-    function "/" (l: string; r: character) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: bit) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: boolean) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: integer) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: real) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: time) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: std_logic) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: bit_vector) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: boolean_vector) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: integer_vector) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: real_vector) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: time_vector) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: std_logic_vector) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: unsigned) return string is begin return l & "," & to_str(r); end function;
-    function "/" (l: string; r: signed) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: character) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: string) return string is begin return l & "," & r; end function;
+    impure function "/" (l: string; r: bit) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: boolean) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: integer) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: real) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: time) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: std_logic) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: bit_vector) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: boolean_vector) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: integer_vector) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: real_vector) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: time_vector) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: std_logic_vector) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: unsigned) return string is begin return l & "," & to_str(r); end function;
+    impure function "/" (l: string; r: signed) return string is begin return l & "," & to_str(r); end function;
 
     -- Replace string
     -- - Naive algorithm
