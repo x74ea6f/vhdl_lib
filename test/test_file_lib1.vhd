@@ -35,6 +35,8 @@ begin
 
     begin
 
+        STR_LIB_CONFIG.set_append_parenthesis(False);
+
         -- txt
         file_open(f_in, file_name1, READ_MODE);
 
@@ -72,8 +74,8 @@ begin
         -- csv
         file_open(f_out, file_name3, WRITE_MODE);
         for i in 0 to 3 loop
-            -- write(l, to_str(int) / intv / rlv / slv);
-            write(l, to_str(int) / to_str(intv, append_parenthesis=>False) / to_str(rlv, append_parenthesis=>False) / slv);
+            write(l, to_str(int) / intv / rlv / slv);
+            -- write(l, to_str(int) / to_str(intv, append_parenthesis=>False) / to_str(rlv, append_parenthesis=>False) / slv);
             int := int + 1;
             writeline(f_out, l);
         end loop;
