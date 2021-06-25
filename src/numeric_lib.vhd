@@ -9,6 +9,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 -- use ieee.std_logic_misc.all;
+use ieee.math_real.all;
 
 package numeric_lib is
 
@@ -126,6 +127,9 @@ package numeric_lib is
 
     alias f_round is f_round_half_up[unsigned, natural return unsigned];
     alias f_round is f_round_half_up[signed, natural return signed];
+
+    -- clog2
+    function clog2(a: positive) return positive;
 
 end package;
 
@@ -646,4 +650,13 @@ package body numeric_lib is
         sum := aa_up + resize(add, sum'length); -- sM, NoOverflow
         return sum; -- sM
     end function;
+
+
+
+    function clog2(constant a: positive) return positive is
+    begin
+        return positive(ceil(log2(real(a))));
+    end function;
+
+
 end;
