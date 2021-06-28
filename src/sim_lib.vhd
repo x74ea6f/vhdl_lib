@@ -57,8 +57,9 @@ package body sim_lib is
     -- make clock
     procedure make_clock(signal clk: out std_logic; constant half_period: in time) is
     begin
-        wait for half_period;
         clk <= '1' when clk='0' else '0';
+        wait for half_period;
+        -- clk <= '1' when clk='0' else '0';
     end procedure;
 
     -- make reset
@@ -101,7 +102,7 @@ package body sim_lib is
         while 0 < size_s loop
             size_t := 31 when (size_s>31) else size_s; -- Max 31bit
             SR.rand(x);
-            ret(size_s-1 downto size_s-size_t) := std_logic_vector(to_signed(integer(floor(x * (2.0 ** size_t))), size_t));
+            ret(size_s-1 downto size_s-size_t) := std_logic_vector(to_unsigned(integer(floor(x * (2.0 ** (size_t)))), size_t));
             size_s := size_s - size_t;
         end loop;
         return ret;

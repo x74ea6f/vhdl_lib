@@ -596,7 +596,8 @@ package body numeric_lib is
     end function;
 
     -- round half up, sM.N to sM
-    -- 0: trunc, 1: up
+    -- 0: trunc, 1: up, +0.5 and truncate.
+    -- -0.5 to 0, 0.5 to 1
     function f_round_half_up(a: signed; constant len: natural) return signed is
         alias aa: signed(a'length-1 downto 0) is a; -- sM.N
         variable aa_up: signed(len-1 downto 0); -- sM
