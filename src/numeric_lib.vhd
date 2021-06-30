@@ -131,6 +131,11 @@ package numeric_lib is
     -- clog2
     function clog2(a: positive) return positive;
 
+    --[TBD]
+    -- add, uM+1=uM
+    function "+"(l:std_logic_vector; r: std_logic) return std_logic_vector;
+    function "+"(l,r:std_logic_vector) return std_logic_vector;
+
 end package;
 
 package body numeric_lib is
@@ -652,12 +657,27 @@ package body numeric_lib is
         return sum; -- sM
     end function;
 
-
-
+    -- clog2
     function clog2(constant a: positive) return positive is
     begin
         return positive(ceil(log2(real(a))));
     end function;
 
+    -- [TBD]
+    -- add, uM+1=uM
+    function "+"(l:std_logic_vector; r: std_logic) return std_logic_vector is
+        variable ret: std_logic_vector(l'range);
+    begin
+        ret := std_logic_vector(unsigned(l) + r);
+        return ret;
+    end function;
+
+    -- add, uM+uM=uM
+    function "+"(l,r:std_logic_vector) return std_logic_vector is
+        variable ret: std_logic_vector(l'range);
+    begin
+        ret := std_logic_vector(unsigned(l) + unsigned(r));
+        return ret;
+    end function;
 
 end;
