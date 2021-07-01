@@ -134,7 +134,7 @@ package numeric_lib is
     --[TBD]
     -- add, uM+1=uM
     function "+"(l:std_logic_vector; r: std_logic) return std_logic_vector;
-    function "+"(l,r:std_logic_vector) return std_logic_vector;
+    -- function "+"(l,r:std_logic_vector) return std_logic_vector;
 
 end package;
 
@@ -672,12 +672,12 @@ package body numeric_lib is
         return ret;
     end function;
 
-    -- add, uM+uM=uM
-    function "+"(l,r:std_logic_vector) return std_logic_vector is
-        variable ret: std_logic_vector(l'range);
-    begin
-        ret := std_logic_vector(unsigned(l) + unsigned(r));
-        return ret;
-    end function;
+    -- -- add, uM+uM=uM
+    -- function "+"(l,r:std_logic_vector) return std_logic_vector is
+    --     variable ret: std_logic_vector(l'range);
+    -- begin
+    --     ret := std_logic_vector(unsigned(l) + unsigned(r));
+    --     return ret;
+    -- end function;
 
 end;
