@@ -658,9 +658,9 @@ package body numeric_lib is
     end function;
 
     -- clog2
-    function clog2(constant a: positive) return positive is
+    function clog2(constant a: positive) return natural is
     begin
-        return positive(ceil(log2(real(a))));
+        return natural(ceil(log2(real(a))));
     end function;
 
     -- [TBD]
