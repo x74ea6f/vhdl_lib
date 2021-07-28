@@ -132,8 +132,10 @@ package numeric_lib is
     function clog2(a: positive) return positive;
 
     --[TBD]
+    -- Increment for Counter
+    function f_increment(slv: std_logic_vector) return std_logic_vector;
     -- add, uM+1=uM
-    function "+"(l:std_logic_vector; r: std_logic) return std_logic_vector;
+    -- function "+"(l:std_logic_vector; r: std_logic) return std_logic_vector;
     -- function "+"(l,r:std_logic_vector) return std_logic_vector;
 
 end package;
@@ -663,14 +665,24 @@ package body numeric_lib is
         return natural(ceil(log2(real(a))));
     end function;
 
-    -- [TBD]
-    -- add, uM+1=uM
-    function "+"(l:std_logic_vector; r: std_logic) return std_logic_vector is
-        variable ret: std_logic_vector(l'range);
+    -- -- [TBD]
+    -- Increment for Counter
+    function f_increment(slv: std_logic_vector) return std_logic_vector is
+        variable inc: std_logic_vector(slv'range);
+        variable ret: std_logic_vector(slv'range);
     begin
-        ret := std_logic_vector(unsigned(l) + r);
+        inc := (slv'right=>'1', others=>'0');
+        ret := std_logic_vector(unsigned(slv) + unsigned(inc));
         return ret;
     end function;
+
+    -- -- add, uM+1=uM
+    -- function "+"(l:std_logic_vector; r: std_logic) return std_logic_vector is
+    --     variable ret: std_logic_vector(l'range);
+    -- begin
+    --     ret := std_logic_vector(unsigned(l) + r);
+    --     return ret;
+    -- end function;
 
     -- -- add, uM+uM=uM
     -- function "+"(l,r:std_logic_vector) return std_logic_vector is

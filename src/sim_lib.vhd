@@ -45,6 +45,7 @@ package sim_lib is
     procedure check(data, exp: std_logic_vector; msg:string:=""; show_result:boolean:=false);
     procedure check(data, exp: unsigned; msg:string:=""; show_result:boolean:=false);
     procedure check(data, exp: signed; msg:string:=""; show_result:boolean:=false);
+    procedure check(data, exp: integer; msg:string:=""; show_result:boolean:=false);
 
 
 end package;
@@ -154,6 +155,11 @@ package body sim_lib is
     procedure check(data, exp: signed; msg:string:=""; show_result:boolean:=false) is
     begin
         check_len(data'length, exp'length, msg, show_result);
+        check_data(to_str(data), to_str(exp), msg, show_result);
+    end procedure;
+
+    procedure check(data, exp: integer; msg:string:=""; show_result:boolean:=false) is
+    begin
         check_data(to_str(data), to_str(exp), msg, show_result);
     end procedure;
 
