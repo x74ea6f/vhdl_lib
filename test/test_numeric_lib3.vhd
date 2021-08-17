@@ -1,4 +1,4 @@
--- [TODO] Test for unsigned/signed vector.
+-- Test for unsigned/signed vector.
 -- in Vivado, function can not return array(?).
 -- 
 
@@ -43,9 +43,6 @@ architecture SIM of test_numeric_lib3 is
         return u_v;
     end function;
 
-    --```
-    --[TODO] Add to library.
-    --```
     type slv_vector is array (natural range <>, natural range <>) of std_logic;
     type unsigned_vector is array (natural range <>, natural range <>) of std_logic;
     type signed_vector is array (natural range <>, natural range <>) of std_logic;
@@ -73,7 +70,7 @@ architecture SIM of test_numeric_lib3 is
         return v;
     end function;
 
-    -- [TODO] can this systhesis?
+    -- can this systhesis?
     procedure set(u_v: inout unsigned_vector; n: natural; v: unsigned) is
     begin
         for j in u_v'range(2) loop
@@ -82,7 +79,7 @@ architecture SIM of test_numeric_lib3 is
     end procedure;
 
 
-    --[TODO] not work in xsim.
+    -- not work in xsim.
     function set_func(u_v: unsigned_vector; n: natural; v: unsigned) return unsigned_vector is
         variable u_v2: unsigned_vector(u_v'range(1), u_v'range(2)):=(others=>(others=>'1'));
     begin
@@ -105,7 +102,7 @@ architecture SIM of test_numeric_lib3 is
         end loop;
     end procedure;
 
-    --[TODO] not work in xsim.
+    -- not work in xsim.
     function get_u_vec(n,m: natural) return unsigned_vector is
         variable u_v: unsigned_vector(0 to n-1, m-1 downto 0):=(others=>(others=>'1'));
     begin
