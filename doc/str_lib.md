@@ -20,7 +20,7 @@ author:
 
 ## Supported type
 [print()](#print), [to_str()](#to_str), [+](#+)の右辺, [/](#/)の右辺で、使用できるタイプを以下に示します。  
-(*) print()は、vectortypeは非対応。
+[*] print()は、vectortypeは非対応(Vivado制限)。
 
 | some type | vector type | 
 | - | - |

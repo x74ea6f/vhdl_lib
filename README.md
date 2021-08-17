@@ -52,7 +52,8 @@ read each doc for more details.
 
 ---
 ### numeric_lib
-- numeric(signed, unsigned) calc. add, sub, mul, div.
+- numeric(signed, unsigned) calc.
+- add, sub, mul, div.
 - clip, round.
 
 #### doc
