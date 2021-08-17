@@ -35,6 +35,7 @@ begin
 
     begin
 
+        -- vector系のstring変換時に"()"を付けないようにする
         STR_LIB_CONFIG.set_append_parenthesis(False);
 
         -- txt

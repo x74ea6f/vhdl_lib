@@ -1,9 +1,14 @@
+---
+title: str_lib
+subtitle: vhdl_lib
+date: 2021-08-17
+author: 
+---
+
 # str_lib
 デバッグ出力やログ出力用の、VHDL文字列ライブラリです。
 ログ出力用のprint()や、各タイプから文字列への変換のto_str()があります。
 (textio.writeline(), integer'image()等, to_string()のラッパーライブラリ)
-
-含まれる関数をアルファベット順に挙げます。
 
 | function/procedure |
 | - |
@@ -32,10 +37,11 @@ str_lib共通の設定を変更します。
 
 ### STR_LIB_CONFIG.set_append_preanthesis()
 `procedure set_append_parenthesis(b: boolean);`  
-append_parenthsisを設定します。
-一部ベクター出力時に"()"を付与し出力するかの制御を行います。to_str()のオプション引数、append_parenthesisがついている関数に対し影響します。  
-`STR_LIB_CONFIG.set_append_parenthesis(True);`の場合、以降function呼び出し時のappend_parenthesisを無視し、"()"を付与しません。
-`STR_LIB_CONFIG.set_append_parenthesis(False);`の場合、以降function呼び出し時のappend_parenthesisで"()"の付与を制御します。
+append_parenthsisを設定します。  
+一部ベクター出力時に"()"を付与し出力するかの制御を行います。  
+to_str()のオプション引数、append_parenthesisがついている関数に対し影響します。  
+`STR_LIB_CONFIG.set_append_parenthesis(True);`の場合、以降procedure呼び出し時のappend_parenthesisを無視し、"()"を付与しません。  
+`STR_LIB_CONFIG.set_append_parenthesis(False);`の場合、以降procedure呼び出し時のappend_parenthesisで"()"の付与します。  
 
 ### STR_LIB_CONFIG.get_append_preanthesis
 `impure function get_append_parenthesis return boolean;`  
@@ -50,9 +56,12 @@ append_parenthsisを設定します。
 `procedure print(v: real; end_line: boolean:=true);`  
 `procedure print(v: time; end_line: boolean:=true);`  
 `procedure print(v: std_logic; end_line: boolean:=true);`  
-textioライブラリのwrite(), writeline()のラッパー関数です。[サポートするタイプ](#supported-type)のvを文字列に変換し、標準出力に出力します。
-end_line=true時にフラッシュします。end_line=false時はバッファリングし、次のend_line=trueを待ちます。
-vectorタイプは対象外です。vectorタイプを出力したい場合は、`print(to_str(vec_type));`のように[to_str()](#to_str)を通す必要があります。
+textioライブラリのwrite(), writeline()のラッパー関数です。  
+[サポートするタイプ](#supported-type)のvを文字列に変換し、標準出力に出力します。  
+end_line=true時にフラッシュします。
+end_line=false時はバッファリングし、次のend_line=trueでフラッシュを行います。  
+vectorタイプは対象外です。  
+vectorタイプを出力したい場合は、`print(to_str(vec_type));`のように[to_str()](#to_str)を通す必要があります。  
 
 ### Example
 ```VHDL
@@ -103,7 +112,12 @@ print(replace("ABcdefg", "AB", "012"));
 `impure function to_str(s: signed; ptype: PRINT_TYPE:=SIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;`  
 `impure function to_str(u: unsigned; ptype: PRINT_TYPE:=UNSIGNED_DEFAULT_TYPE; prefix: string:="0x") return string;`  
 
-[サポートするタイプ](#supported-type)を文字列stringに変換します。 [PRINT_TYPE](#print_type)を付けた場合、指定フォーマットの文字列へ変換します。[PRINT_TYPE](#print_type)指定なしの場合は、上記の各関数宣言を参照。またprefix(Default:"0x")を付けた場合、PRINT_TYPE=HEXの場合にprefix+HEXへと変換します。いくつかのVectorタイプでは、append_parenthesis=Trueの場合、"()"をつけてベクターをまとめます。(例: True時:`(1,2,3)`, False時:`1,2,3`)
+[サポートするタイプ](#supported-type)を文字列stringに変換します。  
+[PRINT_TYPE](#print_type)を付けた場合、指定フォーマットの文字列へ変換します。  
+[PRINT_TYPE](#print_type)指定なしの場合(Default)は、上記の各関数宣言を参照。  
+またprefix(Default:"0x")を付けた場合、PRINT_TYPE=HEXの場合にprefix+HEXへと変換します。  
+いくつかのVectorタイプでは、append_parenthesis=Trueの場合、"()"をつけてベクターをまとめます。  
+(例: True時:`(1,2,3)`, False時:`1,2,3`)  
 
 ### PRINT_TYPE
 数値タイプ等で、2進数(BIN)、10進数（符号有:DEC_S, 無:DEC_U)、16進数(HEX)での出力を指定します。
@@ -135,7 +149,8 @@ constant UNSIGNED_DEFAULT_TYPE: PRINT_TYPE := DEC_U; -- for intger, real
 `impure function "+" (l: string; r: signed) return string;`  
 `impure function "+" (l: string; r: unsigned) return string;`  
 Operator function.  
-rを文字列へ変換(to_str())し、lと結合したl+rを返します。string + stringはできませんので、標準の"&"を使用してください。
+rを文字列へ変換(to_str())し、lと結合したl+rを返します。  
+string + stringはできませんので、標準の"&"を使用してください。  
 
 ### Example
 ```VHDL
@@ -170,12 +185,10 @@ variable v_slv: std_logic_vector(7 down to 0):= x"12";
 `impure function "/" (l: string; r: signed) return string;`  
 `impure function "/" (l: string; r: unsigned) return string;`  
 Operator function.  
-rを文字列へ変換(to_str())し、lとカンマ区切りで結合したl,rを返します。csv形式。
-
+rを文字列へ変換(to_str())し、lとカンマ区切りで結合したl,rを返します。  
+csv形式。  
 
 ### Example
 | code | return string | description | 
 | - | - | - |
 | to_str(X"123") / 123 / 1.23 | "0x123,123,1.230000e+00" | use "/" for csv |
-
-

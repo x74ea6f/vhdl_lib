@@ -1,14 +1,23 @@
+---
+title: numeric_lib
+subtitle: vhdl_lib
+date: 2021-08-17
+author: 
+---
 
 # numeric_lib
-signed, unsgined, std_logic_vectorの演算のライブラリです。
-- 四則演算
-- 丸め
-- クリップ
+signed, unsgined, std_logic_vectorの演算のライブラリです。  
+- 四則演算  
+- ビット演算
+- クリップ  
+- 丸め  
+- 他  
 
 unsigned/signedは関数名共通です。  
-std_logic_vector用は、signedであれば関数名の末尾に"_s", unsignedでは末尾に"_u"が付きます。また、unsignedとsignedの演算であれば、関数名の末尾に"_us"と付きます。  
+std_logic_vector用は、signedであれば関数名の末尾に"_s", unsignedでは末尾に"_u"が付きます。  
+また、unsignedとsignedの演算であれば、関数名の末尾に"_us"と付きます。  
 (例: f_add_us(): unsigned + signed)  
-またビット幅は、a,bで同じである必要はありません。  
+また2個の引数がある場合、ビット幅は同じである必要はありません。  
 
 | Function/Procedure | description|
 | - | - |
@@ -24,6 +33,9 @@ std_logic_vector用は、signedであれば関数名の末尾に"_s", unsigned�
 | [f_round_half_up()](#f_round_half_up) | round |
 | [f_round_to_even()](#f_round_to_even) | round |
 | [f_round()](#f_round) | round |
+| [clog2()](#clog2) | log2(x) for cal bit width |
+| [f_increment()](#f_increment) | Increment for Counter |
+
 
 ## f_add()
 `function f_add(a,b: in unsigned) return unsigned;`  
@@ -125,3 +137,22 @@ aの丸めを行い、lenで指定したビット幅を出力します。丸め�
 `alias f_round is f_round_half_up[signed, natural return signed];`  
 f_round_half_up()へのaliasです。
 
+
+## clog2()
+`function clog2(a: positive) return positive;`  
+log2の計算を行います。  
+小数点以下は切り上げを行い、自然数を返します。  
+RAMのWord数からアドレスビット幅の計算等で使用します。  
+Verilogの$clog2()相当。    
+(real使っているため、合成用回路での使用は非推奨)  
+### Example
+```VHDL
+constant DEPTH: positive:= 256;
+constant ADDRESS_WIDTH: positive:= clog2(DEPTH); -- 8
+```
+
+## f_increment()
+`function f_increment(slv: std_logic_vector) return std_logic_vector;`  
+std_logic_vectorに1を加算し、返します。  
+オーバフローの考慮はしません(0xFFは0x00を返す)。  
+カウンターで使用します。  

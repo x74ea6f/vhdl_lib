@@ -1,7 +1,12 @@
+---
+title: sim_lib
+subtitle: vhdl_lib
+date: 2021-08-17
+author: 
+---
 
 # sim_lib
 シミュレーション向けのVHDLライブラリです。
-含まれる関数をアルファベット順に挙げます。
 
 | Function/Procedure |
 | - |

@@ -8,6 +8,11 @@ Simple and General useful VHDL library.
 ## Packages
 read each doc for more details.
 
+- [str_lib](#str_lib)
+- [sim_lib](#sim_lib)
+- [numeric_lib](#numeric_lib)
+- [file_lib](#file_lib)
+
 ---
 ### str_lib
 - String library for log output & debug text output.  

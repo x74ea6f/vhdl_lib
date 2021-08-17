@@ -128,10 +128,12 @@ package numeric_lib is
     alias f_round is f_round_half_up[unsigned, natural return unsigned];
     alias f_round is f_round_half_up[signed, natural return signed];
 
+    --```
+    -- Others
+    --```
     -- clog2
     function clog2(a: positive) return positive;
 
-    --[TBD]
     -- Increment for Counter
     function f_increment(slv: std_logic_vector) return std_logic_vector;
     -- add, uM+1=uM
@@ -665,7 +667,6 @@ package body numeric_lib is
         return natural(ceil(log2(real(a))));
     end function;
 
-    -- -- [TBD]
     -- Increment for Counter
     function f_increment(slv: std_logic_vector) return std_logic_vector is
         variable inc: std_logic_vector(slv'range);
